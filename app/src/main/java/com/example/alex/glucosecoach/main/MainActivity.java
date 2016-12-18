@@ -1,5 +1,8 @@
-package com.example.alex.glucosecoach;
+package com.example.alex.glucosecoach.main;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.services.APIConnection;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Button connectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,26 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        connectButton = (Button) findViewById(R.id.btn_connect);
+
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Gets the URL from the UI's text field.
+                String stringUrl = "http://192.168.1.101:5000/glucose_coach/api/v1.0/users";
+
+                // Check to see if a network connection is available
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    new APIConnection().execute(stringUrl);
+                } else {
+                    Toast.makeText(getApplicationContext(),"No network connection available",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,5 +127,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void checkConnection() {
+
     }
 }
