@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/txt_last_ins"
-            android:text="Last Reading"
+            android:text="Insulin Taken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/txt_last_carbs"
-            android:text="Last Reading"
+            android:text="Carbs Eaten"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -92,7 +92,7 @@
 
         <TextView
             android:id="@+id/txt_last_exrc"
-            android:text="Last Reading"
+            android:text="Exercise Done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
