@@ -4,8 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,10 +19,16 @@ import android.widget.Toast;
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.services.APIConnection;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button connectButton;
+    FloatingActionMenu materialDesignFAM;
+    FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3,
+            floatingActionButton4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,34 +37,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        connectButton = (Button) findViewById(R.id.btn_connect);
-
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Gets the URL from the UI's text field.
-                String stringUrl = "http://192.168.1.101:5000/glucose_coach/api/v1.0/users";
-
-                // Check to see if a network connection is available
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    new APIConnection().execute(stringUrl);
-                } else {
-                    Toast.makeText(getApplicationContext(),"No network connection available",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        checkConnection();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -70,6 +47,31 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
+        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
+        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
+        floatingActionButton3 = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
+        floatingActionButton4 = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
+
+        floatingActionButton1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu first item clicked
+
+            }
+        });
+        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu second item clicked
+
+            }
+        });
+        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO something when floating action menu third item clicked
+
+            }
+        });
     }
 
     @Override
@@ -130,6 +132,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void checkConnection() {
+        connectButton = (Button) findViewById(R.id.btn_connect);
 
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Gets the URL from the UI's text field.
+                String stringUrl = "http://192.168.1.101:5000/glucose_coach/api/v1.0/users";
+
+                // Check to see if a network connection is available
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    new APIConnection().execute(stringUrl);
+                } else {
+                    Toast.makeText(getApplicationContext(),"No network connection available",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
