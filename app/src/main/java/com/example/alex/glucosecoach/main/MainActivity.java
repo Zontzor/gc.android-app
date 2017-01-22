@@ -13,22 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.services.APIConnection;
+import com.sa90.materialarcmenu.ArcMenu;
+import com.sa90.materialarcmenu.StateChangeListener;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
+import static com.example.alex.glucosecoach.R.id.arcMenu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button connectButton;
-    FloatingActionMenu materialDesignFAM;
-    FloatingActionButton floatingActionButton1, floatingActionButton2, floatingActionButton3,
-            floatingActionButton4;
+    private ArcMenu floatingActionMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,28 +48,17 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        materialDesignFAM = (FloatingActionMenu) findViewById(R.id.material_design_android_floating_action_menu);
-        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
-        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
-        floatingActionButton3 = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
-        floatingActionButton4 = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
-
-        floatingActionButton1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //TODO something when floating action menu first item clicked
+        floatingActionMenu = (ArcMenu) findViewById(arcMenu);
+        floatingActionMenu.setStateChangeListener(new StateChangeListener() {
+            @Override
+            public void onMenuOpened() {
+                Toast.makeText(getApplicationContext(), "Menu Opened", Toast.LENGTH_LONG).show();
 
             }
-        });
-        floatingActionButton2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //TODO something when floating action menu second item clicked
 
-            }
-        });
-        floatingActionButton3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //TODO something when floating action menu third item clicked
-
+            @Override
+            public void onMenuClosed() {
+                Toast.makeText(getApplicationContext(), "Menu Closed", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -3,6 +3,18 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
     <color name="darkGreen">#23a350</color>
 
+    <color name="softRed">#F8CECC</color>
+    <color name="softGreen">#D5E8D4</color>
+    <color name="softBlue">#DAE8FC</color>
+    <color name="softPurple">#E1D5E7</color>
+
+    <color name="hardRed">#C06763</color>
+    <color name="hardGreen">#92C475</color>
+    <color name="hardBlue">#88A3CB</color>
+    <color name="hardPurple">#AB8FB8</color>
+
+    <color name="transparentGray">#BF000000</color>
 </resources>
