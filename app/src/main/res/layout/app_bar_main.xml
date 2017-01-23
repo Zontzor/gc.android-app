@@ -36,28 +36,28 @@
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item4_exercise"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_menu_manage"
+            android:src="@drawable/ic_exercise_24dp"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/softPurple" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item3_carbs"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_menu_manage"
+            android:src="@drawable/ic_food_24dp"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/softBlue" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item2_insulin"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_menu_manage"
+            android:src="@drawable/ic_insulin_24dp"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/softGreen" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_menu_item1_bg"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_menu_manage"
+            android:src="@drawable/ic_bg_reading_24dp"
             android:layout_height="wrap_content"
             app:backgroundTint="@color/softRed" />
 
