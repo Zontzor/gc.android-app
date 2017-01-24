@@ -31,6 +31,7 @@ public class AddBGReadingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bg_reading_add);
+        apiService = new RestManager();
 
         editTextBGValue = (EditText) findViewById(R.id.editText_bg_value);
         editTextBGTimeStamp = (EditText) findViewById(R.id.editText_bg_time);
@@ -39,39 +40,6 @@ public class AddBGReadingActivity extends Activity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("click", "BG submit button clicked");
-                apiService = new RestManager();
-                try {
-                    Call<List<User>> listCall = apiService.getUserService().getAllUsers();
-                    listCall.enqueue(new Callback<List<User>>() {
-                        @Override
-                        public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                            Log.d("onResponse", "Entered method");
-                            if (response.isSuccessful()) {
-                                Log.d("connection", "Successful connection");
-                                List<User> userList = response.body();
-
-                                for (int i = 0; i < userList.size(); i++) {
-                                    User user = userList.get(i);
-                                }
-                            } else {
-                                Log.d("connection", "Unsuccessful connection");
-                                int statusCode = response.code();
-
-                                switch (statusCode) {
-
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<User>> call, Throwable t) {
-
-                        }
-                    });
-                } catch (Exception ex) {
-                    Toast.makeText(getApplicationContext(), "Unsuccessful connection", Toast.LENGTH_SHORT).show();
-                }
 
             }
         });

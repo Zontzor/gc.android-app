@@ -7,6 +7,9 @@ package com.example.alex.glucosecoach.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
 
     private String dateCreated;

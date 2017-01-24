@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,9 +20,17 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.model.User;
 import com.example.alex.glucosecoach.services.APIConnection;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.alex.glucosecoach.R.id.arcMenu;
 
@@ -30,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button connectButton;
     private ArcMenu floatingActionMenu;
     private FloatingActionButton bgFabMenuItem, insFabMenuItem, carbsFabMenuItem, exerFabMenuItem;
+
+    // Test objects
+    User testUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         carbsFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
         exerFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
+
+        createTestObjects();
     }
 
     @Override
@@ -183,5 +197,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+    }
+
+    public void createTestObjects() {
+        RestManager apiService = new RestManager();
+        try {
+            Call<User> userCall = apiService.getUserService().getUser("Neutr0n");
+            userCall.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        Log.d("connection", "Successful retrieving resource");
+                        testUser = response.body();
+                        Log.d("testUser", testUser.getUsername());
+                    } else {
+                        Log.d("connection", "Error retrieving resource");
+                        int statusCode = response.code();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception ex) {
+            Log.d("connection", "Unsuccessful connection");
+        }
     }
 }
