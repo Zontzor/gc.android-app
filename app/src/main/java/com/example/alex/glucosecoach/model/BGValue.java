@@ -1,4 +1,4 @@
-package com.example.alex.glucosecoach.business;
+package com.example.alex.glucosecoach.model;
 
 /**
  * Created by alex on 12/19/16.
@@ -12,6 +12,11 @@ public class BGValue {
 
     public BGValue(String username, Float BGReading, String timestamp) {
         setUsername(username);
+        setBGReading(BGReading);
+        setTimestamp(timestamp);
+    }
+
+    public BGValue(Float BGReading, String timestamp) {
         setBGReading(BGReading);
         setTimestamp(timestamp);
     }

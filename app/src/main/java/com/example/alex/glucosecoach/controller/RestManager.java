@@ -1,0 +1,32 @@
+package com.example.alex.glucosecoach.controller;
+
+import android.util.Log;
+
+import com.example.alex.glucosecoach.services.UserService;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ * Created by alex on 1/24/17.
+ */
+
+public class RestManager {
+
+    private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
+    private UserService userService;
+
+    public UserService getUserService() {
+        if (userService == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            userService = retrofit.create(UserService.class);
+            Log.d("UserService", "Created retrofit userService instance");
+        }
+
+        return userService;
+    }
+}

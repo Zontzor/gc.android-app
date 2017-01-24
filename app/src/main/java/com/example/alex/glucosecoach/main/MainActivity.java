@@ -25,8 +25,7 @@ import com.sa90.materialarcmenu.StateChangeListener;
 
 import static com.example.alex.glucosecoach.R.id.arcMenu;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button connectButton;
     private ArcMenu floatingActionMenu;
@@ -48,12 +47,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Setup connect button
         connectButton = (Button) findViewById(R.id.btn_connect);
         setupConnListener();
 
+        // Setup FAB menu
         floatingActionMenu = (ArcMenu) findViewById(arcMenu);
         setupFabListener();
 
+        // Setup FAB buttons
         bgFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
         insFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
         carbsFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
