@@ -1,11 +1,8 @@
-package com.example.alex.glucosecoach.model;
+package com.example.alex.glucosecoach.models;
 
 /**
  * Created by alex on 12/19/16.
  */
-
-import java.util.HashMap;
-import java.util.Map;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,10 +1,7 @@
 package com.example.alex.glucosecoach.services;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.example.alex.glucosecoach.main.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;

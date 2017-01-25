@@ -1,6 +1,6 @@
 package com.example.alex.glucosecoach.services;
 
-import com.example.alex.glucosecoach.model.User;
+import com.example.alex.glucosecoach.models.User;
 
 import java.util.List;
 

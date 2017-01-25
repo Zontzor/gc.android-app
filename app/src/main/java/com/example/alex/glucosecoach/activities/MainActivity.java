@@ -1,9 +1,6 @@
-package com.example.alex.glucosecoach.main;
+package com.example.alex.glucosecoach.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -21,12 +18,10 @@ import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.RestManager;
-import com.example.alex.glucosecoach.model.User;
-import com.example.alex.glucosecoach.services.APIConnection;
+import com.example.alex.glucosecoach.models.User;
+
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,10 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        // Setup connect button
-        connectButton = (Button) findViewById(R.id.btn_connect);
-        setupConnListener();
 
         // Setup FAB menu
         floatingActionMenu = (ArcMenu) findViewById(arcMenu);
@@ -115,17 +106,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_logbook) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_charts) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_goals) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_settings) {
 
         }
 
@@ -134,36 +123,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void setupConnListener() {
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Gets the URL from the UI's text field.
-                String stringUrl = "http://192.168.1.101:5000/glucose_coach/api/v1.0/users";
-
-                // Check to see if a network connection is available
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    new APIConnection().execute(stringUrl);
-                } else {
-                    Toast.makeText(getApplicationContext(),"No network connection available",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
     public void setupFabListener() {
         floatingActionMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
-                Toast.makeText(getApplicationContext(), "Menu Opened", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Menu Opened", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onMenuClosed() {
-                Toast.makeText(getApplicationContext(), "Menu Closed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Menu Closed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -207,12 +176,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
-                        Log.d("connection", "Successful retrieving resource");
                         testUser = response.body();
-                        Log.d("testUser", testUser.getUsername());
+                        Log.d("testUser", "Successful retrieving resource: " +  testUser.getUsername());
                     } else {
-                        Log.d("connection", "Error retrieving resource");
-                        int statusCode = response.code();
+                        Log.d("connection", "Error retrieving resource" + response.code());
                     }
                 }
 
