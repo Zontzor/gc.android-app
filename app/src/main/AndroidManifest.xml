@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.AddBGReadingActivity"></activity>
+        <activity android:name=".activities.AddInsulinActivity"></activity>
+        <activity android:name=".activities.AddCarbsActivity"></activity>
+        <activity android:name=".activities.AddExerciseActivity"></activity>
     </application>
 
 </manifest>

@@ -9,12 +9,10 @@ import com.example.alex.glucosecoach.R;
  * Created by alex on 1/25/17.
  */
 
-public class AddInsulinActivity extends Activity {
+public class AddCarbsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insulin_add);
-
-
+        setContentView(R.layout.activity_carbs_add);
     }
 }

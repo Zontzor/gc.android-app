@@ -149,21 +149,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         insFabMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
+                startActivity(addInsulinActivity);
             }
         });
 
         carbsFabMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent addCarbsActivity = new Intent(MainActivity.this, AddCarbsActivity.class);
+                startActivity(addCarbsActivity);
             }
         });
 
         exerFabMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseActivity.class);
+                startActivity(addExerciseActivity);
             }
         });
     }
