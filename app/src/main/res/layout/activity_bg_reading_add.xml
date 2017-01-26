@@ -32,7 +32,8 @@
         android:id="@+id/editText_bg_value"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_bg_value"/>
+        android:layout_below="@+id/text_bg_value"
+        android:inputType="numberDecimal"/>
 
     <TextView
         android:id="@+id/text_bg_time"

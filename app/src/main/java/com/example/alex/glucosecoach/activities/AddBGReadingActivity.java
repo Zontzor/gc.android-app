@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.models.BGValue;
@@ -43,49 +44,33 @@ public class AddBGReadingActivity extends Activity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    testValue = new BGValue("Test", 6.2, "2016-12-19 08:00:00");
-                    Call<BGValue> bgCall = apiService.getBGService().postUserBGReading(testValue, testValue.getUsername());
-                    bgCall.enqueue(new Callback<BGValue> () {
-                        @Override
-                        public void onResponse(Call<BGValue>  call, Response<BGValue>  response) {
-                            if (response.isSuccessful()) {
-                                Log.d("postBgValue", "Successful post");
-                            } else {
-                                Log.d("postBgValue", "Unsuccessful post");
+                String bgValue = editTextBGValue.getText().toString();
+                if (bgValue.matches("[0-9.]+"))  {
+                    try {
+                        bgValue = editTextBGValue.getText().toString();
+                        testValue = new BGValue("Test", Double.parseDouble(bgValue), "2016-12-19 08:00:00");
+                        Call<BGValue> bgCall = apiService.getBGService().postUserBGReading(testValue, testValue.getUsername());
+                        bgCall.enqueue(new Callback<BGValue>() {
+                            @Override
+                            public void onResponse(Call<BGValue> call, Response<BGValue> response) {
+                                if (response.isSuccessful()) {
+                                    Log.d("postBgValue", "Successful post");
+                                } else {
+                                    Log.d("postBgValue", "Unsuccessful post");
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<BGValue>  call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<BGValue> call, Throwable t) {
 
-                        }
-                    });
-                } catch (Exception ex) {
-                    Log.d("connection", "Unsuccessful connection");
+                            }
+                        });
+                    } catch (Exception ex) {
+                        Log.d("connection", "Unsuccessful connection");
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Enter a BG Value", Toast.LENGTH_SHORT).show();
                 }
-
-                /*try {
-                    Call<List<BGValue>> userCall = apiService.getBGService().getUsersBGReadings("Neutr0n");
-                    userCall.enqueue(new Callback<List<BGValue>> () {
-                        @Override
-                        public void onResponse(Call<List<BGValue>>  call, Response<List<BGValue>>  response) {
-                            if (response.isSuccessful()) {
-
-                                Log.d("BGReading", "Successful retrieving resource");
-                            } else {
-                                Log.d("connection", "Error retrieving resource" + response.code());
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<BGValue>>  call, Throwable t) {
-
-                        }
-                    });
-                } catch (Exception ex) {
-                    Log.d("connection", "Unsuccessful connection");
-                }*/
             }
         });
     }
