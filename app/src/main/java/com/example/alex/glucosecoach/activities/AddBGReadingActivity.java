@@ -28,6 +28,8 @@ public class AddBGReadingActivity extends Activity {
     private Button btnSubmit;
     private RestManager apiService;
 
+    BGValue testValue;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bg_reading_add);
@@ -42,6 +44,28 @@ public class AddBGReadingActivity extends Activity {
             @Override
             public void onClick(View view) {
                 try {
+                    testValue = new BGValue("Test", 6.2, "2016-12-19 08:00:00");
+                    Call<BGValue> bgCall = apiService.getBGService().postUserBGReading(testValue, testValue.getUsername());
+                    bgCall.enqueue(new Callback<BGValue> () {
+                        @Override
+                        public void onResponse(Call<BGValue>  call, Response<BGValue>  response) {
+                            if (response.isSuccessful()) {
+                                Log.d("postBgValue", "Successful post");
+                            } else {
+                                Log.d("postBgValue", "Unsuccessful post");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<BGValue>  call, Throwable t) {
+
+                        }
+                    });
+                } catch (Exception ex) {
+                    Log.d("connection", "Unsuccessful connection");
+                }
+
+                /*try {
                     Call<List<BGValue>> userCall = apiService.getBGService().getUsersBGReadings("Neutr0n");
                     userCall.enqueue(new Callback<List<BGValue>> () {
                         @Override
@@ -61,7 +85,7 @@ public class AddBGReadingActivity extends Activity {
                     });
                 } catch (Exception ex) {
                     Log.d("connection", "Unsuccessful connection");
-                }
+                }*/
             }
         });
     }

@@ -4,16 +4,28 @@ package com.example.alex.glucosecoach.models;
  * Created by alex on 12/19/16.
  */
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class BGValue {
 
+    @SerializedName("bg_timestamp")
     private String bgTimestamp;
+    @SerializedName("bg_value")
     private Double bgValue;
+    @SerializedName("id")
     private Integer id;
+    @SerializedName("username")
     private String username;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public BGValue(String username, Double bgValue, String bgTimestamp) {
+        setUsername(username);
+        setBgValue(bgValue);
+        setBgTimestamp(bgTimestamp);
+    }
 
     public String getBgTimestamp() {
         return bgTimestamp;
