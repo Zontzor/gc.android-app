@@ -30,8 +30,8 @@ import static com.example.alex.glucosecoach.R.id.arcMenu;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button connectButton;
-    private ArcMenu floatingActionMenu;
-    private FloatingActionButton bgFabMenuItem, insFabMenuItem, carbsFabMenuItem, exerFabMenuItem;
+    private ArcMenu _arcMenu;
+    private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
 
     // Test objects
     User testUser;
@@ -39,8 +39,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        loadContent();
+        if (isLoggedIn()) {
+            loadContent();
+        } else {
+            Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginActivity);
+        }
     }
 
     public void loadContent() {
@@ -58,14 +62,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         // Setup FAB menu
-        floatingActionMenu = (ArcMenu) findViewById(arcMenu);
+        _arcMenu = (ArcMenu) findViewById(arcMenu);
         setupFabListener();
 
         // Setup FAB buttons
-        bgFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
-        insFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
-        carbsFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
-        exerFabMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
+        _bgMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
+        _insMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
+        _carbsMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
+        _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
 
         createTestObjects();
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupFabListener() {
-        floatingActionMenu.setStateChangeListener(new StateChangeListener() {
+        _arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
                 //Toast.makeText(getApplicationContext(), "Menu Opened", Toast.LENGTH_SHORT).show();
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupFabMenuItemsListeners() {
-        bgFabMenuItem.setOnClickListener(new View.OnClickListener() {
+        _bgMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        insFabMenuItem.setOnClickListener(new View.OnClickListener() {
+        _insMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
@@ -157,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        carbsFabMenuItem.setOnClickListener(new View.OnClickListener() {
+        _carbsMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addCarbsActivity = new Intent(MainActivity.this, AddCarbsActivity.class);
@@ -165,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        exerFabMenuItem.setOnClickListener(new View.OnClickListener() {
+        _exerMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseActivity.class);
