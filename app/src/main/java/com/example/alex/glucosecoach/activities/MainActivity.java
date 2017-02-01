@@ -14,8 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.RestManager;
 import com.example.alex.glucosecoach.models.User;
@@ -41,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loadContent();
+    }
+
+    public void loadContent() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -169,6 +172,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(addExerciseActivity);
             }
         });
+    }
+
+    public boolean isLoggedIn() {
+        return false;
     }
 
     public void createTestObjects() {

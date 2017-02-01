@@ -21,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.LoginActivity"></activity>
         <activity android:name=".activities.AddBGReadingActivity"></activity>
         <activity android:name=".activities.AddInsulinActivity"></activity>
         <activity android:name=".activities.AddCarbsActivity"></activity>

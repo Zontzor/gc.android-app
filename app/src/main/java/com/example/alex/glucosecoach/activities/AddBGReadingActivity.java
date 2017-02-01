@@ -10,10 +10,7 @@ import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.models.BGValue;
-import com.example.alex.glucosecoach.models.User;
 import com.example.alex.glucosecoach.controller.RestManager;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,10 +21,10 @@ import retrofit2.Response;
  */
 
 public class AddBGReadingActivity extends Activity {
-    private EditText editTextBGValue;
-    private EditText editTextBGTimeStamp;
-    private Button btnSubmit;
-    private RestManager apiService;
+    private EditText _bgValueText;
+    private EditText _bgTimeText;
+    private Button _sumbitButton;
+    private RestManager _apiService;
 
     BGValue testValue;
 
@@ -35,21 +32,20 @@ public class AddBGReadingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bg_reading_add);
 
-        apiService = new RestManager();
+        _apiService = new RestManager();
 
-        editTextBGValue = (EditText) findViewById(R.id.editText_bg_value);
-        editTextBGTimeStamp = (EditText) findViewById(R.id.editText_bg_time);
-        btnSubmit = (Button) findViewById(R.id.btn_sumbit_bg);
+        _bgValueText = (EditText) findViewById(R.id.editText_bg_value);
+        _bgTimeText = (EditText) findViewById(R.id.editText_bg_time);
+        _sumbitButton = (Button) findViewById(R.id.btn_sumbit_bg);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        _sumbitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String bgValue = editTextBGValue.getText().toString();
+                String bgValue = _bgValueText.getText().toString();
                 if (bgValue.matches("[0-9.]+"))  {
                     try {
-                        bgValue = editTextBGValue.getText().toString();
                         testValue = new BGValue("Test", Double.parseDouble(bgValue), "2016-12-19 08:00:00");
-                        Call<BGValue> bgCall = apiService.getBGService().postUserBGReading(testValue, testValue.getUsername());
+                        Call<BGValue> bgCall = _apiService.getBGService().postUserBGReading(testValue, testValue.getUsername());
                         bgCall.enqueue(new Callback<BGValue>() {
                             @Override
                             public void onResponse(Call<BGValue> call, Response<BGValue> response) {
