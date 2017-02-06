@@ -134,7 +134,9 @@ public class LoginActivity extends AppCompatActivity {
         tokenManager.setToken(this, token.getTokenValue());
         _loginButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login success", Toast.LENGTH_LONG).show();
-        finish();
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainActivity);
     }
 
     public void onLoginFailed() {

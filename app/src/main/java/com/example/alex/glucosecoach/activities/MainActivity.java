@@ -3,7 +3,6 @@ package com.example.alex.glucosecoach.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,27 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import com.example.alex.glucosecoach.R;
-import com.example.alex.glucosecoach.controller.RestManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.models.User;
 
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.example.alex.glucosecoach.R.id.arcMenu;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private Button connectButton;
     private ArcMenu _arcMenu;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
-
-    // Test objects
-    User testUser;
 
     TokenManager tokenManager;
 
@@ -47,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isLoggedIn()) {
             loadContent();
         } else {
-            Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(loginActivity);
         }
     }
