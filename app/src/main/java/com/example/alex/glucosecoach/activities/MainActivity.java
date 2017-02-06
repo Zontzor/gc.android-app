@@ -3,6 +3,7 @@ package com.example.alex.glucosecoach.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,13 +13,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import com.example.alex.glucosecoach.R;
-import com.example.alex.glucosecoach.controller.TokenManager;
-import com.example.alex.glucosecoach.models.User;
+import android.widget.TextView;
 
+import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.controller.TokenManager;
+
+import com.example.alex.glucosecoach.controller.UserManager;
+import com.example.alex.glucosecoach.models.User;
+import com.example.alex.glucosecoach.services.UserService;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.alex.glucosecoach.R.id.arcMenu;
 
@@ -26,11 +35,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArcMenu _arcMenu;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
 
+    RestManager apiService;
     TokenManager tokenManager;
+    UserManager userManager = new UserManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         tokenManager = new TokenManager();
+        userManager = new UserManager();
 
         super.onCreate(savedInstanceState);
         if (isLoggedIn()) {
@@ -66,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _carbsMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
+
+        getUser();
     }
 
     @Override
@@ -182,5 +196,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             return true;
         }
+    }
+
+    public void getUser() {
+        apiService = new RestManager();
+        UserService userService = apiService.getUserService(this);
+        Call<User> call = userService.getUser(userManager.getUsername(this));
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    setUserLogin(response.body());
+                } else {
+                    // error response, no access to resource?
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+
+    public void setUserLogin(User user) {
+        userManager.setEmail(this, user.getEmail());
+
+        TextView _usernameText = (TextView) findViewById(R.id.txt_username);
+        TextView _emailText = (TextView) findViewById(R.id.txt_email);
+        _usernameText.setText(user.getUsername());
+        _emailText.setText(user.getEmail());
     }
 }

@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.RestManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
+import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.models.Token;
+import com.example.alex.glucosecoach.models.User;
 import com.example.alex.glucosecoach.services.LoginService;
+import com.example.alex.glucosecoach.services.UserService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String username = _usernameText.getText().toString();
+        final String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
         LoginService loginService = _apiService.getLoginService(username, password);
@@ -94,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     Token token = response.body();
                     Log.d("token", token.getTokenValue());
                     progressDialog.dismiss();
-                    onLoginSuccess(token);
+                    onLoginSuccess(token, username);
                 } else {
                     // error response, no access to resource?
                     progressDialog.dismiss();
@@ -129,9 +132,13 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess(Token token) {
+    public void onLoginSuccess(Token token, String username) {
         tokenManager = new TokenManager();
         tokenManager.setToken(this, token.getTokenValue());
+
+        UserManager userManager = new UserManager();
+        userManager.setUsername(this, username);
+
         _loginButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login success", Toast.LENGTH_LONG).show();
         Intent mainActivity = new Intent(this, MainActivity.class);

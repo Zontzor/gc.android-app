@@ -1,5 +1,6 @@
 package com.example.alex.glucosecoach.controller;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -28,6 +29,8 @@ public class RestManager {
     private BGService bgService;
     private InsService insService;
 
+    private static TokenManager tokenManager = new TokenManager();;
+
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =
@@ -35,15 +38,28 @@ public class RestManager {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
-    public UserService getUserService() {
-        if (userService == null) {
+    public UserService getUserService(Context context) {
+        String authToken = Credentials.basic(tokenManager.getToken(context), "unused");
+
+        /*if (userService == null) {
             retrofit = builder.build();
 
             userService = retrofit.create(UserService.class);
             Log.d("UserService", "Created retrofit userService instance");
+        }*/
+
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
         }
 
-        return userService;
+        return retrofit.create(UserService.class);
     }
 
     public BGService getBGService() {
