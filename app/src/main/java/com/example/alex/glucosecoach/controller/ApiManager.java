@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by alex on 1/24/17.
  */
 
-public class RestManager {
+public class ApiManager {
 
     private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
 

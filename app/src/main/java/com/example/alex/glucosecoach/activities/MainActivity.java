@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.alex.glucosecoach.R;
-import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 
 import com.example.alex.glucosecoach.controller.UserManager;
@@ -35,14 +35,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArcMenu _arcMenu;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
 
-    RestManager apiService;
+    ApiManager apiService;
     TokenManager tokenManager;
-    UserManager userManager = new UserManager();
+    UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         tokenManager = new TokenManager();
-        userManager = new UserManager();
+        userManager = new UserManager(this);
 
         super.onCreate(savedInstanceState);
         if (isLoggedIn()) {
@@ -92,33 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_sign_out) {
-            tokenManager.clearToken(this);
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -135,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_settings) {
 
+        } else if (id == R.id.nav_signout) {
+            tokenManager.clearToken(this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -199,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getUser() {
-        apiService = new RestManager();
+        apiService = new ApiManager();
         UserService userService = apiService.getUserService(this);
-        Call<User> call = userService.getUser(userManager.getUsername(this));
+        Call<User> call = userService.getUser(userManager.getUsername());
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -221,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setUserLogin(User user) {
-        userManager.setEmail(this, user.getEmail());
+        userManager.setEmail(user.getEmail());
 
         TextView _usernameText = (TextView) findViewById(R.id.txt_username);
         TextView _emailText = (TextView) findViewById(R.id.txt_email);

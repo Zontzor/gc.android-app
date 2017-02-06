@@ -13,13 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
-import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.models.Token;
-import com.example.alex.glucosecoach.models.User;
 import com.example.alex.glucosecoach.services.LoginService;
-import com.example.alex.glucosecoach.services.UserService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,8 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     Button _loginButton;
     TextView _signupLink;
 
-    private RestManager _apiService;
-    TokenManager tokenManager;
+    private ApiManager apiManager;
+    private TokenManager tokenManager;
+    private UserManager userManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_login);
         _signupLink = (TextView) findViewById(R.id.link_signup);
 
-        _apiService = new RestManager();
+
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -66,6 +65,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);*/
             }
         });
+
+        apiManager = new ApiManager();
+        tokenManager = new TokenManager();
+        userManager = new UserManager(this);
     }
 
     public void login() {
@@ -88,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         final String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        LoginService loginService = _apiService.getLoginService(username, password);
+        LoginService loginService = apiManager.getLoginService(username, password);
         Call<Token> call = loginService.basicLogin();
         call.enqueue(new Callback<Token >() {
             @Override
@@ -133,11 +136,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess(Token token, String username) {
-        tokenManager = new TokenManager();
-        tokenManager.setToken(this, token.getTokenValue());
 
-        UserManager userManager = new UserManager();
-        userManager.setUsername(this, username);
+        tokenManager.setToken(this, token.getTokenValue());
+        userManager.setUsername(username);
 
         _loginButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login success", Toast.LENGTH_LONG).show();

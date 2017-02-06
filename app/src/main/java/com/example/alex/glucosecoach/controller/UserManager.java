@@ -11,31 +11,39 @@ import com.example.alex.glucosecoach.models.User;
  */
 
 public class UserManager {
-    User user;
+    private Context context;
+    private final SharedPreferences settings;
 
-    public UserManager() {}
+    public UserManager(Context context) {
+        setContext(context);
+        settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+    }
 
-    public String getUsername(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public Context getContext() {
+        return this.context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public String getUsername() {
         String username = settings.getString("username", ""/*default value*/);
         return username;
     }
 
-    public void setUsername(Context context, String username) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public void setUsername(String username) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("username", username);
         editor.commit();
     }
 
-    public String getEmail(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public String getEmail() {
         String email = settings.getString("email", ""/*default value*/);
         return email;
     }
 
-    public void setEmail(Context context, String email) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public void setEmail(String email) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("email", email);
         editor.commit();

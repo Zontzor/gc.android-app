@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.models.BGValue;
-import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.controller.ApiManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,7 +24,7 @@ public class AddBGReadingActivity extends Activity {
     private EditText _bgValueText;
     private EditText _bgTimeText;
     private Button _sumbitButton;
-    private RestManager _apiService;
+    private ApiManager _apiService;
 
     BGValue testValue;
 
@@ -32,7 +32,7 @@ public class AddBGReadingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bg_reading_add);
 
-        _apiService = new RestManager();
+        _apiService = new ApiManager();
 
         _bgValueText = (EditText) findViewById(R.id.editText_bg_value);
         _bgTimeText = (EditText) findViewById(R.id.editText_bg_time);
