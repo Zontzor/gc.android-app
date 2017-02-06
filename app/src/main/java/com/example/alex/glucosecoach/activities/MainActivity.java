@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.RestManager;
+import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.models.User;
 
 import com.sa90.materialarcmenu.ArcMenu;
@@ -36,8 +37,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Test objects
     User testUser;
 
+    TokenManager tokenManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        tokenManager = new TokenManager();
+
         super.onCreate(savedInstanceState);
         if (isLoggedIn()) {
             loadContent();
@@ -71,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _carbsMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
-
-        createTestObjects();
     }
 
     @Override
@@ -102,6 +105,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_sign_out) {
+            tokenManager.clearToken(this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -179,31 +187,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean isLoggedIn() {
-        return false;
-    }
-
-    public void createTestObjects() {
-        RestManager apiService = new RestManager();
-        try {
-            Call<User> userCall = apiService.getUserService().getUser("Neutr0n");
-            userCall.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()) {
-                        testUser = response.body();
-                        Log.d("testUser", "Successful retrieving resource: " +  testUser.getUsername());
-                    } else {
-                        Log.d("connection", "Error retrieving resource" + response.code());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception ex) {
-            Log.d("connection", "Unsuccessful connection");
+        if (!tokenManager.hasToken(this)) {
+            return false;
+        } else {
+            return true;
         }
     }
 }
