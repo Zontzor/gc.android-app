@@ -9,24 +9,34 @@ import android.preference.PreferenceManager;
  */
 
 public class TokenManager {
+    private Context context;
+    private final SharedPreferences settings;
 
-    public TokenManager() {}
+    public TokenManager(Context context) {
+        setContext(context);
+        settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+    }
 
-    public String getToken(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public Context getContext() {
+        return this.context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public String getToken() {
         String auth_token_string = settings.getString("token", ""/*default value*/);
         return auth_token_string;
     }
 
-    public void setToken(Context context, String token) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public void setToken(String token) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("token", token);
         editor.commit();
     }
 
-    public boolean hasToken(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public boolean hasToken() {
         String auth_token_string = settings.getString("token", ""/*default value*/);
 
         if (!auth_token_string.isEmpty()) {
@@ -36,8 +46,7 @@ public class TokenManager {
         }
     }
 
-    public void clearToken(Context context) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+    public void clearToken() {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("token", null);
         editor.commit();

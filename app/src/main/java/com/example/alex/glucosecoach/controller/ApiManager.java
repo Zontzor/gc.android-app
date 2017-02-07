@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.alex.glucosecoach.models.Token;
 import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.InsService;
@@ -25,11 +26,8 @@ public class ApiManager {
 
     private static Retrofit retrofit;
 
-    private UserService userService;
     private BGService bgService;
     private InsService insService;
-
-    private static TokenManager tokenManager = new TokenManager();;
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -38,15 +36,8 @@ public class ApiManager {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
-    public UserService getUserService(Context context) {
-        String authToken = Credentials.basic(tokenManager.getToken(context), "unused");
-
-        /*if (userService == null) {
-            retrofit = builder.build();
-
-            userService = retrofit.create(UserService.class);
-            Log.d("UserService", "Created retrofit userService instance");
-        }*/
+    public UserService getUserService(String token) {
+        String authToken = Credentials.basic(token, "unused");
 
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
@@ -62,15 +53,21 @@ public class ApiManager {
         return retrofit.create(UserService.class);
     }
 
-    public BGService getBGService() {
-        if (bgService == null) {
-            retrofit = builder.build();
+    public BGService getBGService(String token) {
+        String authToken = Credentials.basic(token, "unused");
 
-            bgService = retrofit.create(BGService.class);
-            Log.d("BGService", "Created retrofit bgService instance");
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
         }
 
-        return bgService;
+        return retrofit.create(BGService.class);
     }
 
     public InsService getInsService() {

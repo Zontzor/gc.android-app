@@ -21,7 +21,7 @@ public class AddInsulinActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insulin_add);
+        setContentView(R.layout.activity_insulin);
 
         apiService = new ApiManager();
 

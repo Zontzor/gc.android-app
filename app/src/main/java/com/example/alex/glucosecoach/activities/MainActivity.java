@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tokenManager = new TokenManager();
+        tokenManager = new TokenManager(this);
 
         if (isLoggedIn()) {
             userManager = new UserManager(this);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_signout) {
-            tokenManager.clearToken(this);
+            tokenManager.clearToken();
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean isLoggedIn() {
-        if (!tokenManager.hasToken(this)) {
+        if (!tokenManager.hasToken()) {
             return false;
         } else {
             return true;
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getUser() {
         apiService = new ApiManager();
-        UserService userService = apiService.getUserService(this);
+        UserService userService = apiService.getUserService(tokenManager.getToken());
         Call<User> call = userService.getUser(userManager.getUsername());
         call.enqueue(new Callback<User>() {
             @Override
@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     userManager.setEmail(response.body().getEmail());
                 } else {
                     // error response, no access to resource?
+                    Log.d("authentication", "Incorrect login details");
                 }
             }
 

@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         apiManager = new ApiManager();
-        tokenManager = new TokenManager();
+        tokenManager = new TokenManager(this);
         userManager = new UserManager(this);
     }
 
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess(Token token, String username) {
 
-        tokenManager.setToken(this, token.getTokenValue());
+        tokenManager.setToken(token.getTokenValue());
         userManager.setUsername(username);
 
         _loginButton.setEnabled(true);
