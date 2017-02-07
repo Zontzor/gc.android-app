@@ -8,18 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:id="@+id/text_add_bg_reading"
-        android:text="Add BG Entry"
-        android:textSize="32sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
 
     <TextView
         android:id="@+id/text_bg_value"
@@ -30,7 +19,7 @@
 
     <EditText
         android:id="@+id/editText_bg_value"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_bg_value"
         android:inputType="numberDecimal"/>
@@ -44,7 +33,7 @@
 
     <EditText
         android:id="@+id/editText_bg_time"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_bg_value"/>
 

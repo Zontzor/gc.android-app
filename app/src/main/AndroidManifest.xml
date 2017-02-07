@@ -17,13 +17,14 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".activities.AddBGReadingActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".activities.AddBGReadingActivity">
+        </activity>
         <activity android:name=".activities.AddInsulinActivity"></activity>
         <activity android:name=".activities.AddCarbsActivity"></activity>
         <activity android:name=".activities.AddExerciseActivity"></activity>
