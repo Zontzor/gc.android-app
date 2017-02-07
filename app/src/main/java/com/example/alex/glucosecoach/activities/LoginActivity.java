@@ -46,8 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_login);
         _signupLink = (TextView) findViewById(R.id.link_signup);
 
-
-
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -96,14 +94,14 @@ public class LoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<Token >() {
             @Override
             public void onResponse(Call<Token> call, Response<Token> response) {
+                progressDialog.dismiss();
+
                 if (response.isSuccessful()) {
                     Token token = response.body();
                     Log.d("token", token.getTokenValue());
-                    progressDialog.dismiss();
                     onLoginSuccess(token, username);
                 } else {
                     // error response, no access to resource?
-                    progressDialog.dismiss();
                     onLoginFailed();
                 }
             }

@@ -41,11 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        tokenManager = new TokenManager();
-        userManager = new UserManager(this);
-
         super.onCreate(savedInstanceState);
+
+        tokenManager = new TokenManager();
+
         if (isLoggedIn()) {
+            userManager = new UserManager(this);
             loadContent();
         } else {
             Intent loginActivity = new Intent(this, LoginActivity.class);
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void loadContent() {
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _carbsMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
+
+        // Get user info from API and fill in side menu info
 
         getUser();
     }
@@ -138,6 +142,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _bgMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (_arcMenu.isMenuOpened()) {
+                    _arcMenu.toggleMenu();
+                }
                 Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
                 startActivity(addBGReadingActivity);
             }
@@ -146,6 +153,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _insMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (_arcMenu.isMenuOpened()) {
+                    _arcMenu.toggleMenu();
+                }
                 Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
                 startActivity(addInsulinActivity);
             }
@@ -154,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _carbsMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (_arcMenu.isMenuOpened()) {
+                    _arcMenu.toggleMenu();
+                }
                 Intent addCarbsActivity = new Intent(MainActivity.this, AddCarbsActivity.class);
                 startActivity(addCarbsActivity);
             }
@@ -162,6 +175,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _exerMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (_arcMenu.isMenuOpened()) {
+                    _arcMenu.toggleMenu();
+                }
                 Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseActivity.class);
                 startActivity(addExerciseActivity);
             }
@@ -184,7 +200,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    setUserLogin(response.body());
+                    TextView _usernameText = (TextView) findViewById(R.id.txt_username);
+                    TextView _emailText = (TextView) findViewById(R.id.txt_email);
+
+                    _usernameText.setText(response.body().getUsername());
+                    _emailText.setText(response.body().getEmail());
+
+                    userManager.setEmail(response.body().getEmail());
                 } else {
                     // error response, no access to resource?
                 }
@@ -196,14 +218,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("Error", t.getMessage());
             }
         });
-    }
-
-    public void setUserLogin(User user) {
-        userManager.setEmail(user.getEmail());
-
-        TextView _usernameText = (TextView) findViewById(R.id.txt_username);
-        TextView _emailText = (TextView) findViewById(R.id.txt_email);
-        _usernameText.setText(user.getUsername());
-        _emailText.setText(user.getEmail());
     }
 }
