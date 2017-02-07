@@ -59,8 +59,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                /*Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);*/
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
+                finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
 
@@ -101,14 +103,12 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("token", token.getTokenValue());
                     onLoginSuccess(token, username);
                 } else {
-                    // error response, no access to resource?
                     onLoginFailed();
                 }
             }
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                // something went completely south (like no internet connection)
                 Log.d("Error", t.getMessage());
             }
         });
@@ -143,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainActivity = new Intent(this, MainActivity.class);
         mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainActivity);
+        finish();
     }
 
     public void onLoginFailed() {

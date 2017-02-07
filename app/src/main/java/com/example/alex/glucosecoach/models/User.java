@@ -20,6 +20,12 @@ public class User {
     private Double weight;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public User (String username, String email, String password) {
+        setUsername(username);
+        setEmail(email);
+        setPassword(password);
+    }
+
     public String getDateCreated() {
         return dateCreated;
     }

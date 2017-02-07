@@ -24,12 +24,9 @@ public class ApiManager {
 
     private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
 
-    private static Retrofit retrofit;
-
-    private BGService bgService;
-    private InsService insService;
-
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+    private static Retrofit retrofit;
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
@@ -70,15 +67,21 @@ public class ApiManager {
         return retrofit.create(BGService.class);
     }
 
-    public InsService getInsService() {
-        if (insService == null) {
-            retrofit = builder.build();
+    public InsService getInsService(String token) {
+        String authToken = Credentials.basic(token, "unused");
 
-            insService = retrofit.create(InsService.class);
-            Log.d("BGService", "Created retrofit bgService instance");
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
         }
 
-        return insService;
+        return retrofit.create(InsService.class);
     }
 
     public LoginService getLoginService(String username, String password) {
