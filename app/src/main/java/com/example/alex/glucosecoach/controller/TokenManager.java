@@ -26,8 +26,7 @@ public class TokenManager {
     }
 
     public String getToken() {
-        String auth_token_string = settings.getString("token", ""/*default value*/);
-        return auth_token_string;
+        return settings.getString("token", ""/*default value*/);
     }
 
     public void setToken(String token) {

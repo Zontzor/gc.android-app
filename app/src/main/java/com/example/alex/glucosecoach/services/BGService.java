@@ -16,8 +16,8 @@ import retrofit2.http.Path;
 
 public interface BGService {
     @GET("users/{username}/bgreadings")
-    Call<List<BGValue>> getUsersBGReadings(@Path("username") String username);
+    Call<List<BGValue>> getBGReadings(@Path("username") String username);
 
     @POST("users/{username}/bgreadings")
-    Call<BGValue> postUserBGReading(@Body BGValue bgValue, @Path("username") String username);
+    Call<BGValue> postBGReading(@Body BGValue bgValue, @Path("username") String username);
 }

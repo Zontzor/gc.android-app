@@ -21,8 +21,7 @@ public class BGValue {
     private String username;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public BGValue(String username, Double bgValue, String bgTimestamp) {
-        setUsername(username);
+    public BGValue(Double bgValue, String bgTimestamp) {
         setBgValue(bgValue);
         setBgTimestamp(bgTimestamp);
     }

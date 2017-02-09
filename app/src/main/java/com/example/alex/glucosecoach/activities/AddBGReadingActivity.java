@@ -1,6 +1,5 @@
 package com.example.alex.glucosecoach.activities;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,14 +7,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
-import com.example.alex.glucosecoach.models.BGValue;
 import com.example.alex.glucosecoach.controller.ApiManager;
-import com.example.alex.glucosecoach.models.Token;
+import com.example.alex.glucosecoach.models.BGValue;
+import com.example.alex.glucosecoach.services.BGService;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -33,11 +31,9 @@ public class AddBGReadingActivity extends AppCompatActivity {
     private EditText _bgTimeText;
     private Button _sumbitButton;
 
-    private ApiManager apiService;
+    ApiManager apiService;
     UserManager userManager;
     TokenManager tokenManager;
-
-    BGValue testValue;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +54,27 @@ public class AddBGReadingActivity extends AppCompatActivity {
 
         _sumbitButton.setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View view) {
+                BGValue bgValue = new BGValue(Double.parseDouble(_bgValueText.getText().toString()), _bgTimeText.getText().toString());
 
+                BGService bgService = apiService.getBGService(tokenManager.getToken());
+                Call<BGValue> call = bgService.postBGReading(bgValue, userManager.getUsername());
+                call.enqueue(new Callback<BGValue >() {
+                    @Override
+                    public void onResponse(Call<BGValue> call, Response<BGValue> response) {
+
+                        if (response.isSuccessful()) {
+                            Log.d("bgreading", "Successful post");
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BGValue> call, Throwable t) {
+                        Log.d("Error", t.getMessage());
+                    }
+                });
             }
         });
     }
