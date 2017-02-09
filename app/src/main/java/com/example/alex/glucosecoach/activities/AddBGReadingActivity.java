@@ -1,5 +1,6 @@
 package com.example.alex.glucosecoach.activities;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.TokenManager;
@@ -16,6 +18,8 @@ import com.example.alex.glucosecoach.models.BGValue;
 import com.example.alex.glucosecoach.services.BGService;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -50,13 +54,38 @@ public class AddBGReadingActivity extends AppCompatActivity {
         _bgTimeText = (EditText) findViewById(R.id.editText_bg_time);
         _sumbitButton = (Button) findViewById(R.id.btn_sumbit_bg);
 
-        _bgTimeText.setHint(DateFormat.getDateTimeInstance().format(new Date()));
+        Date date = new Date();
+        String strDateFormat = "HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+
+        _bgTimeText.setText(sdf.format(date));
+
+        _bgTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calender = Calendar.getInstance();
+                int hour = calender.get(Calendar.HOUR_OF_DAY);
+                int minute = calender.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddBGReadingActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                                _bgTimeText.setText(hourOfDay + ":" + minuteOfHour);
+                            }
+                        }, hour, minute, true);
+                timePickerDialog.show();
+            }
+        });
 
         _sumbitButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-                BGValue bgValue = new BGValue(Double.parseDouble(_bgValueText.getText().toString()), _bgTimeText.getText().toString());
+                if (!validate()) {
+                    return;
+                }
+
+                BGValue bgValue = new BGValue(Double.parseDouble(_bgValueText.getText().toString()), formateDateTime(_bgTimeText.getText().toString()));
 
                 BGService bgService = apiService.getBGService(tokenManager.getToken());
                 Call<BGValue> call = bgService.postBGReading(bgValue, userManager.getUsername());
@@ -79,6 +108,26 @@ public class AddBGReadingActivity extends AppCompatActivity {
         });
     }
 
+    public boolean validate() {
+        boolean valid = true;
+
+        String bgValue = _bgValueText.getText().toString();
+
+        if (bgValue.isEmpty() || !bgValue.matches("^\\d{0,2}(?:\\.\\d)?$")) {
+            _bgValueText.setError("enter a valid value");
+            valid = false;
+        } else {
+            _bgValueText.setError(null);
+        }
+
+        return valid;
+    }
+
+    public String formateDateTime(String time) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        return dateFormat.format(date) + " " + time + ":00";
+    }
 
 
     @Override

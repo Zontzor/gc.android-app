@@ -25,8 +25,8 @@ public class AddInsulinActivity extends Activity {
 
         apiService = new ApiManager();
 
-        editTextInsValue = (EditText) findViewById(R.id.editText_bg_value);
-        editTextInsTimeStamp = (EditText) findViewById(R.id.editText_bg_time);
+        editTextInsValue = (EditText) findViewById(R.id.editText_ins_value);
+        editTextInsTimeStamp = (EditText) findViewById(R.id.editText_ins_time);
         btnSubmit = (Button) findViewById(R.id.btn_sumbit_bg);
 
 
