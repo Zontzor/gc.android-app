@@ -95,6 +95,7 @@ public class AddBGReadingActivity extends AppCompatActivity {
 
                         if (response.isSuccessful()) {
                             Log.d("bgreading", "Successful post");
+                            finish();
                         } else {
                         }
                     }

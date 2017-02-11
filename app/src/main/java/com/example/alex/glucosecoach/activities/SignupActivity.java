@@ -3,7 +3,6 @@ package com.example.alex.glucosecoach.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,9 +14,7 @@ import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.ApiManager;
-import com.example.alex.glucosecoach.models.Token;
 import com.example.alex.glucosecoach.models.User;
-import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.UserService;
 
 import retrofit2.Call;
@@ -48,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
         apiManager = new ApiManager();
 
         _usernameText = (EditText) findViewById(R.id.username);
-        _emailText = (EditText) findViewById(R.id.input_email);
+        _emailText = (EditText) findViewById(R.id.input_username);
         _passwordText = (EditText) findViewById(R.id.input_password);
         _reEnterPasswordText = (EditText) findViewById(R.id.input_reEnterPassword);
         _signupButton = (Button) findViewById(R.id.btn_signup);

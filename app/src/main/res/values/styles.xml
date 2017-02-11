@@ -7,7 +7,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -25,5 +24,12 @@
         <item name="android:textColorHint">@color/iron</item>
     </style>
 
+    <style name="AppTheme.AddValues" parent="AppTheme">
+        <item name="android:textColor">@color/iron</item>
+        <item name="android:textColorHint">@color/iron</item>
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+    </style>
 
 </resources>

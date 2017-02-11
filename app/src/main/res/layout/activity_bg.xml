@@ -3,58 +3,42 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="56dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp">
-
-        <TextView
-            android:id="@+id/text_bg_value"
-            android:text="Value mg/dl: "
-            android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/editText_bg_value"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"/>
+            android:hint="Value mg/dl" />
+    </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/editText_bg_value"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp">
-
-        <TextView
-            android:id="@+id/text_bg_time"
-            android:text="Time: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/editText_bg_time"
-            android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+        <EditText android:id="@+id/editText_bg_time"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:textIsSelectable="true"
-            android:paddingLeft="20dp"/>
-    </LinearLayout>
+            android:hint="Time" />
+    </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_marginLeft="20dp"
-            android:id="@+id/btn_sumbit_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit"/>
-    </LinearLayout>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_sumbit_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Submit"
+        android:textColor="@color/colorAccent" />
 
 </LinearLayout>

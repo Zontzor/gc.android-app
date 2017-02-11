@@ -30,7 +30,9 @@
             android:theme="@style/AppTheme.Splash"
             android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
-        <activity android:name=".activities.AddBGReadingActivity"></activity>
+        <activity android:name=".activities.AddBGReadingActivity"
+            android:theme="@style/AppTheme.AddValues">
+        </activity>
         <activity android:name=".activities.AddInsulinActivity"></activity>
         <activity android:name=".activities.AddCarbsActivity"></activity>
         <activity android:name=".activities.AddExerciseActivity"></activity>
