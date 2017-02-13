@@ -33,7 +33,9 @@
         <activity android:name=".activities.AddBGReadingActivity"
             android:theme="@style/AppTheme.AddValues">
         </activity>
-        <activity android:name=".activities.AddInsulinActivity"></activity>
+        <activity android:name=".activities.AddInsulinActivity"
+            android:theme="@style/AppTheme.AddValues">
+        </activity>
         <activity android:name=".activities.AddCarbsActivity"></activity>
         <activity android:name=".activities.AddExerciseActivity"></activity>
     </application>

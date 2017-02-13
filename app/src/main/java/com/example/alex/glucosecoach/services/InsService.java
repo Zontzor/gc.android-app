@@ -16,8 +16,8 @@ import retrofit2.http.Path;
 
 public interface InsService {
     @GET("users/{username}/insdosages")
-    Call<List<InsValue>> getUsersInsDosages(@Path("username") String username);
+    Call<List<InsValue>> getInsDosages(@Path("username") String username);
 
     @POST("users/{username}/insdosages")
-    Call<InsValue> postUserInsDosage(@Body InsValue bgValue, @Path("username") String username);
+    Call<InsValue> postInsDosage(@Body InsValue bgValue, @Path("username") String username);
 }

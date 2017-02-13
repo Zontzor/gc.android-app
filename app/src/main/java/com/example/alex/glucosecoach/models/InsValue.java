@@ -21,8 +21,7 @@ public class InsValue {
     @SerializedName("ins_timestamp")
     private String insulinTimestamp;
 
-    public InsValue(String username, String insulinType, Double insulinValue, String insulinTimestamp) {
-        setUsername(username);
+    public InsValue(String insulinType, Double insulinValue, String insulinTimestamp) {
         setInsulinType(insulinType);
         setInsulinValue(insulinValue);
         setInsulinTimestamp(insulinTimestamp);

@@ -35,9 +35,9 @@ public class AddBGReadingActivity extends AppCompatActivity {
     private EditText _bgTimeText;
     private Button _sumbitButton;
 
-    ApiManager apiService;
-    UserManager userManager;
-    TokenManager tokenManager;
+    ApiManager _apiService;
+    UserManager _userManager;
+    TokenManager _tokenManager;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +46,9 @@ public class AddBGReadingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("BG Reading");
 
-        apiService = new ApiManager();
-        userManager = new UserManager(this);
-        tokenManager = new TokenManager(this);
+        _apiService = new ApiManager();
+        _userManager = new UserManager(this);
+        _tokenManager = new TokenManager(this);
 
         _bgValueText = (EditText) findViewById(R.id.editText_bg_value);
         _bgTimeText = (EditText) findViewById(R.id.editText_bg_time);
@@ -87,8 +87,8 @@ public class AddBGReadingActivity extends AppCompatActivity {
 
                 BGValue bgValue = new BGValue(Double.parseDouble(_bgValueText.getText().toString()), formateDateTime(_bgTimeText.getText().toString()));
 
-                BGService bgService = apiService.getBGService(tokenManager.getToken());
-                Call<BGValue> call = bgService.postBGReading(bgValue, userManager.getUsername());
+                BGService bgService = _apiService.getBGService(_tokenManager.getToken());
+                Call<BGValue> call = bgService.postBGReading(bgValue, _userManager.getUsername());
                 call.enqueue(new Callback<BGValue >() {
                     @Override
                     public void onResponse(Call<BGValue> call, Response<BGValue> response) {
@@ -113,12 +113,20 @@ public class AddBGReadingActivity extends AppCompatActivity {
         boolean valid = true;
 
         String bgValue = _bgValueText.getText().toString();
+        String bgTime = _bgTimeText.getText().toString();
 
         if (bgValue.isEmpty() || !bgValue.matches("^\\d{0,2}(?:\\.\\d)?$")) {
             _bgValueText.setError("enter a valid value");
             valid = false;
         } else {
             _bgValueText.setError(null);
+        }
+
+        if (bgTime.isEmpty() || !bgTime.matches("^([01]\\d|2[0-3]):?([0-5]\\d)$")) {
+            _bgTimeText.setError("enter a valid value");
+            valid = false;
+        } else {
+            _bgTimeText.setError(null);
         }
 
         return valid;

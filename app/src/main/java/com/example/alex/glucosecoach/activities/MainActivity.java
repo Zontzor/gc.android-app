@@ -49,9 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             userManager = new UserManager(this);
             loadContent();
         } else {
-            Intent loginActivity = new Intent(this, LoginActivity.class);
-            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginActivity);
+            startLoginActivity();
         }
     }
 
@@ -210,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     // error response, no access to resource?
                     Log.d("authentication", "Incorrect login details");
+                    startLoginActivity();
                 }
             }
 
@@ -219,5 +218,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("Error", t.getMessage());
             }
         });
+    }
+
+    public void startLoginActivity() {
+        Intent loginActivity = new Intent(this, LoginActivity.class);
+        loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginActivity);
     }
 }
