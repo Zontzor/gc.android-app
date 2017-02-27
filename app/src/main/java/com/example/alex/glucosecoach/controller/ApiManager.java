@@ -11,6 +11,8 @@ import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.UserService;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -24,7 +26,10 @@ public class ApiManager {
 
     private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS);
 
     private static Retrofit retrofit;
 

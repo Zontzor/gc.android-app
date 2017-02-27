@@ -79,8 +79,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        _loginButton.setEnabled(false);
-
         // TODO: Cleanup overlay
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme);
@@ -109,7 +107,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Token> call, Throwable t) {
-                Log.d("Error", t.getMessage());
+                progressDialog.dismiss();
+                onLoginFailed();
+                Log.d("Server connect error", t.getMessage());
             }
         });
     }
@@ -130,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // disable going back to the MainActivity
-        _loginButton.setEnabled(true);
         moveTaskToBack(true);
     }
 
@@ -139,7 +138,6 @@ public class LoginActivity extends AppCompatActivity {
         tokenManager.setToken(token.getTokenValue());
         userManager.setUsername(username);
 
-        _loginButton.setEnabled(true);
         Toast.makeText(getBaseContext(), "Login success", Toast.LENGTH_LONG).show();
         Intent mainActivity = new Intent(this, MainActivity.class);
         mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -149,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
     }
 
     public boolean validate() {
