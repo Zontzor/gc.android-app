@@ -9,6 +9,7 @@ import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
+import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
 
 import java.util.concurrent.TimeUnit;
@@ -111,5 +112,20 @@ public class ApiManager {
         }
 
         return retrofit.create(LoginService.class);
+    }
+
+    public PredictionService getPredictionService(String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(PredictionService.class);
     }
 }

@@ -39,7 +39,7 @@ public class AddInsulinActivity extends AppCompatActivity {
     private EditText _insTimeText;
     private Button _sumbitButton;
 
-    ApiManager _apiService;
+    ApiManager _apiManager;
     UserManager _userManager;
     TokenManager _tokenManager;
 
@@ -51,7 +51,7 @@ public class AddInsulinActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("BG Reading");
 
-        _apiService = new ApiManager();
+        _apiManager = new ApiManager();
         _userManager = new UserManager(this);
         _tokenManager = new TokenManager(this);
 
@@ -96,7 +96,7 @@ public class AddInsulinActivity extends AppCompatActivity {
 
                 InsValue insValue = new InsValue(_insTypeRadioButton.getText().toString(), Double.parseDouble(_insValueText.getText().toString()), formateDateTime(_insTimeText.getText().toString()));
 
-                InsService insService = _apiService.getInsService(_tokenManager.getToken());
+                InsService insService = _apiManager.getInsService(_tokenManager.getToken());
                 Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
                 call.enqueue(new Callback<InsValue >() {
                     @Override

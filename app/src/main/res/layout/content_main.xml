@@ -98,4 +98,10 @@
             android:layout_below="@+id/txt_last_exrc"/>
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/btn_start_predicition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Insulin Value"/>
+
 </LinearLayout>

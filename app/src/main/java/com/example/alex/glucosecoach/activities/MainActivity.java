@@ -11,8 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.alex.glucosecoach.R;
@@ -21,6 +21,7 @@ import com.example.alex.glucosecoach.controller.TokenManager;
 
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.models.User;
+import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
@@ -35,18 +36,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArcMenu _arcMenu;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
 
-    ApiManager apiService;
-    TokenManager tokenManager;
-    UserManager userManager;
+    private Button _btnStartPredictionActivity;
+
+    ApiManager _apiManager;
+    TokenManager _tokenManager;
+    UserManager _userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tokenManager = new TokenManager(this);
+        _tokenManager = new TokenManager(this);
 
         if (isLoggedIn()) {
-            userManager = new UserManager(this);
+            _userManager = new UserManager(this);
             loadContent();
         } else {
             startLoginActivity();
@@ -79,8 +82,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
 
-        // Get user info from API and fill in side menu info
+        _apiManager = new ApiManager();
+        PredictionService predictionService = _apiManager.getPredictionService(_tokenManager.getToken());
 
+        _btnStartPredictionActivity = (Button) findViewById(R.id.btn_start_predicition);
+        _btnStartPredictionActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        // Get user info from API and fill in side menu info
         getUser();
     }
 
@@ -111,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_signout) {
-            tokenManager.clearToken();
+            _tokenManager.clearToken();
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -183,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean isLoggedIn() {
-        if (!tokenManager.hasToken()) {
+        if (!_tokenManager.hasToken()) {
             return false;
         } else {
             return true;
@@ -191,9 +203,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getUser() {
-        apiService = new ApiManager();
-        UserService userService = apiService.getUserService(tokenManager.getToken());
-        Call<User> call = userService.getUser(userManager.getUsername());
+        UserService userService = _apiManager.getUserService(_tokenManager.getToken());
+        Call<User> call = userService.getUser(_userManager.getUsername());
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -204,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     _usernameText.setText(response.body().getUsername());
                     _emailText.setText(response.body().getEmail());
 
-                    userManager.setEmail(response.body().getEmail());
+                    _userManager.setEmail(response.body().getEmail());
                 } else {
                     // error response, no access to resource?
                     Log.d("authentication", "Incorrect login details");
