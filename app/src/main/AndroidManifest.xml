@@ -36,8 +36,10 @@
         <activity android:name=".activities.AddInsulinActivity"
             android:theme="@style/AppTheme.AddValues">
         </activity>
-        <activity android:name=".activities.AddCarbsActivity"></activity>
-        <activity android:name=".activities.AddExerciseLogActivity"></activity>
+        <activity android:name=".activities.AddCarbsActivity"
+            android:theme="@style/AppTheme.AddValues"></activity>
+        <activity android:name=".activities.AddExerciseLogActivity"
+            android:theme="@style/AppTheme.AddValues"></activity>
     </application>
 
 </manifest>
