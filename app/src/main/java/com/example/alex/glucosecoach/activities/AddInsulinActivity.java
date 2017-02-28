@@ -66,7 +66,7 @@ public class AddInsulinActivity extends AppCompatActivity {
 
         _insTimeText.setText(sdf.format(date));
 
-        _insValueText.setOnClickListener(new View.OnClickListener() {
+        _insTimeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar calender = Calendar.getInstance();
