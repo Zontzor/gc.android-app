@@ -92,7 +92,6 @@ public class SignupActivity extends AppCompatActivity {
 
         final User user = new User(username, email, password);
 
-        // TODO: Implement your own signup logic here.
         UserService userService = apiManager.getUserService("");
         Call<String> call = userService.getUsername(user.getUsername());
         call.enqueue(new Callback<String >() {

@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by alex on 2/27/17.
  */
 
-public class PredicitionFact {
+public class Fact {
     @SerializedName("pf_date")
     private String pfDate;
     @SerializedName("pf_time_of_day")
@@ -26,7 +26,7 @@ public class PredicitionFact {
     private Integer exerciseValue;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public PredicitionFact(String pfDate, Integer pfTimeOfDay, Integer userID, Double bgValue, Double insValue, Integer foodValue, Integer exerciseValue, Map<String, Object> additionalProperties) {
+    public Fact(String pfDate, Integer pfTimeOfDay, Integer userID, Double bgValue, Double insValue, Integer foodValue, Integer exerciseValue, Map<String, Object> additionalProperties) {
         setPfDate(pfDate);
         setPfTimeOfDay(pfTimeOfDay);
         setUserID(userID);

@@ -1,9 +1,6 @@
 package com.example.alex.glucosecoach.services;
 
-import com.example.alex.glucosecoach.models.PredicitionFact;
-
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
@@ -13,5 +10,5 @@ import retrofit2.http.Path;
 
 public interface PredictionService {
     @GET("users/predict/{username}")
-    Call<PredicitionFact> getPrediction(@Path("username") String username);
+    Call<Float> getPrediction(@Path("username") String username);
 }

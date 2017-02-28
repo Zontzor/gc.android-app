@@ -20,8 +20,9 @@ import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 
 import com.example.alex.glucosecoach.controller.UserManager;
+import com.example.alex.glucosecoach.models.Fact;
 import com.example.alex.glucosecoach.models.User;
-import com.example.alex.glucosecoach.services.PredictionService;
+import com.example.alex.glucosecoach.services.FactService;
 import com.example.alex.glucosecoach.services.UserService;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
@@ -35,7 +36,7 @@ import static com.example.alex.glucosecoach.R.id.arcMenu;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ArcMenu _arcMenu;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
-
+    private TextView _txtBGValue, _txtInsulinValue, _txtCarbsValue, _txtExerciseValue;
     private Button _btnStartPredictionActivity;
 
     ApiManager _apiManager;
@@ -82,8 +83,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
 
+        // Setup Main Screen Text Views
+        _txtBGValue = (TextView) findViewById(R.id.txt_last_bg_value);
+        _txtInsulinValue = (TextView) findViewById(R.id.txt_last_ins_value);
+        _txtCarbsValue = (TextView) findViewById(R.id.txt_last_carbs_value);
+        _txtExerciseValue = (TextView) findViewById(R.id.txt_last_exrc_value);
+
+        // Create API Manager instance
         _apiManager = new ApiManager();
-        PredictionService predictionService = _apiManager.getPredictionService(_tokenManager.getToken());
 
         _btnStartPredictionActivity = (Button) findViewById(R.id.btn_start_predicition);
         _btnStartPredictionActivity.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Get user info from API and fill in side menu info
         getUser();
+
+        populateMainScreen();
     }
 
     @Override
@@ -203,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getUser() {
+        _apiManager = new ApiManager();
+        _userManager = new UserManager(this);
         UserService userService = _apiManager.getUserService(_tokenManager.getToken());
         Call<User> call = userService.getUser(_userManager.getUsername());
         call.enqueue(new Callback<User>() {
@@ -226,7 +237,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+
+    public void populateMainScreen() {
+        // Populate main screen with data
+        FactService factService = _apiManager.getFactService(_tokenManager.getToken());
+        Call<Fact> call = factService.getFact(_userManager.getUsername());
+        call.enqueue(new Callback<Fact>() {
+            @Override
+            public void onResponse(Call<Fact> call, Response<Fact> response) {
+                if (response.isSuccessful()) {
+                    Fact fact = response.body();
+                    _txtBGValue.setText(fact.getBgValue().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Fact> call, Throwable t) {
+                // error response, no access to resource?
+                Log.d("authentication", "Incorrect login details");
             }
         });
     }

@@ -1,14 +1,12 @@
 package com.example.alex.glucosecoach.controller;
 
-import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.example.alex.glucosecoach.models.Token;
 import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
+import com.example.alex.glucosecoach.services.FactService;
 import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
 
@@ -42,16 +40,11 @@ public class ApiManager {
     public UserService getUserService(String token) {
         String authToken = Credentials.basic(token, "unused");
 
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+        AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+        httpClient.addInterceptor(interceptor);
 
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
+        builder.client(httpClient.build());
+        retrofit = builder.build();
 
         return retrofit.create(UserService.class);
     }
@@ -112,6 +105,21 @@ public class ApiManager {
         }
 
         return retrofit.create(LoginService.class);
+    }
+
+    public FactService getFactService(String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(FactService.class);
     }
 
     public PredictionService getPredictionService(String authToken) {
