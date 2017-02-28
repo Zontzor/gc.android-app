@@ -141,7 +141,7 @@ public class ApiManager {
         return retrofit.create(PredictionService.class);
     }
 
-    public FoodLogService getFoodService(String authToken) {
+    public FoodLogService getFoodLogService(String authToken) {
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 

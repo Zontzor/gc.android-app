@@ -36,7 +36,7 @@
         <activity android:name=".activities.AddInsulinActivity"
             android:theme="@style/AppTheme.AddValues">
         </activity>
-        <activity android:name=".activities.AddCarbsActivity"
+        <activity android:name=".activities.AddFoodLogActivity"
             android:theme="@style/AppTheme.AddValues"></activity>
         <activity android:name=".activities.AddExerciseLogActivity"
             android:theme="@style/AppTheme.AddValues"></activity>

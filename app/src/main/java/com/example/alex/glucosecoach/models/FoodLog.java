@@ -27,6 +27,12 @@ public class FoodLog {
         setFl_timestamp(fl_timestamp);
     }
 
+    public FoodLog(Integer food_id, Double fl_quantity, String fl_timestamp) {
+        setFood_id(food_id);
+        setFl_quantity(fl_quantity);
+        setFl_timestamp(fl_timestamp);
+    }
+
     public Integer getId() {
         return id;
     }

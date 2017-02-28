@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (_arcMenu.isMenuOpened()) {
                     _arcMenu.toggleMenu();
                 }
-                Intent addCarbsActivity = new Intent(MainActivity.this, AddCarbsActivity.class);
+                Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
                 startActivity(addCarbsActivity);
             }
         });

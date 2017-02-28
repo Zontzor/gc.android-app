@@ -49,7 +49,7 @@ public class AddInsulinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insulin);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("BG Reading");
+        getSupportActionBar().setTitle("Add Insulin Log");
 
         _apiManager = new ApiManager();
         _userManager = new UserManager(this);
