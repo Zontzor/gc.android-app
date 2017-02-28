@@ -1,13 +1,11 @@
 package com.example.alex.glucosecoach.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,9 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.ApiManager;
@@ -241,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (_arcMenu.isMenuOpened()) {
                     _arcMenu.toggleMenu();
                 }
-                Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseActivity.class);
+                Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
                 startActivity(addExerciseActivity);
             }
         });

@@ -37,7 +37,7 @@
             android:theme="@style/AppTheme.AddValues">
         </activity>
         <activity android:name=".activities.AddCarbsActivity"></activity>
-        <activity android:name=".activities.AddExerciseActivity"></activity>
+        <activity android:name=".activities.AddExerciseLogActivity"></activity>
     </application>
 
 </manifest>

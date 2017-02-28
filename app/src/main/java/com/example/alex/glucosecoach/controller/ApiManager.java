@@ -2,8 +2,11 @@ package com.example.alex.glucosecoach.controller;
 
 import android.text.TextUtils;
 
+import com.example.alex.glucosecoach.models.ExerciseLog;
 import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
+import com.example.alex.glucosecoach.services.ExerciseLogService;
+import com.example.alex.glucosecoach.services.FoodLogService;
 import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.FactService;
@@ -135,5 +138,35 @@ public class ApiManager {
         }
 
         return retrofit.create(PredictionService.class);
+    }
+
+    public FoodLogService getFoodService(String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(FoodLogService.class);
+    }
+
+    public ExerciseLogService getExerciseService(String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(ExerciseLogService.class);
     }
 }
