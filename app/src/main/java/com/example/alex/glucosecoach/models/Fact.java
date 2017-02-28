@@ -24,9 +24,8 @@ public class Fact {
     private Integer foodValue;
     @SerializedName("exercise_value")
     private Integer exerciseValue;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public Fact(String pfDate, Integer pfTimeOfDay, Integer userID, Double bgValue, Double insValue, Integer foodValue, Integer exerciseValue, Map<String, Object> additionalProperties) {
+    public Fact(String pfDate, Integer pfTimeOfDay, Integer userID, Double bgValue, Double insValue, Integer foodValue, Integer exerciseValue) {
         setPfDate(pfDate);
         setPfTimeOfDay(pfTimeOfDay);
         setUserID(userID);
@@ -34,7 +33,6 @@ public class Fact {
         setInsValue(insValue);
         setFoodValue(foodValue);
         setExerciseValue(exerciseValue);
-        setAdditionalProperties(additionalProperties);
     }
 
     public String getPfDate() {
@@ -91,13 +89,5 @@ public class Fact {
 
     public void setExerciseValue(Integer exerciseValue) {
         this.exerciseValue = exerciseValue;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return additionalProperties;
-    }
-
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
     }
 }

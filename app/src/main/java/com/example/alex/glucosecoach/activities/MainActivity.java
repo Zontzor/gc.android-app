@@ -251,6 +251,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccessful()) {
                     Fact fact = response.body();
                     _txtBGValue.setText(fact.getBgValue().toString());
+                    _txtInsulinValue.setText(fact.getInsValue().toString());
+                    _txtCarbsValue.setText(fact.getFoodValue().toString());
+                    _txtExerciseValue.setText(fact.getExerciseValue().toString());
                 }
             }
 
