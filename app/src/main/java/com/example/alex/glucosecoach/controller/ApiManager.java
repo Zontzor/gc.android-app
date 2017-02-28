@@ -6,6 +6,7 @@ import com.example.alex.glucosecoach.models.ExerciseLog;
 import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.ExerciseLogService;
+import com.example.alex.glucosecoach.services.ExerciseService;
 import com.example.alex.glucosecoach.services.FoodLogService;
 import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
@@ -155,7 +156,7 @@ public class ApiManager {
         return retrofit.create(FoodLogService.class);
     }
 
-    public ExerciseLogService getExerciseService(String authToken) {
+    public ExerciseLogService getExerciseLogService(String authToken) {
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -168,5 +169,20 @@ public class ApiManager {
         }
 
         return retrofit.create(ExerciseLogService.class);
+    }
+
+    public ExerciseService getExerciseService(String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
+        return retrofit.create(ExerciseService.class);
     }
 }
