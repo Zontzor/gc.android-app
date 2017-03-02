@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-    private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
+    private static String BASE_URL = "http://147.252.145.189:5000/glucose_coach/api/v1.0/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
@@ -96,7 +96,9 @@ public class ApiManager {
         return getLoginService(null);
     }
 
-    public LoginService getLoginService(String authToken) {
+    public LoginService getLoginService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -111,7 +113,9 @@ public class ApiManager {
         return retrofit.create(LoginService.class);
     }
 
-    public FactService getFactService(String authToken) {
+    public FactService getFactService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -126,7 +130,9 @@ public class ApiManager {
         return retrofit.create(FactService.class);
     }
 
-    public PredictionService getPredictionService(String authToken) {
+    public PredictionService getPredictionService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -141,7 +147,9 @@ public class ApiManager {
         return retrofit.create(PredictionService.class);
     }
 
-    public FoodLogService getFoodLogService(String authToken) {
+    public FoodLogService getFoodLogService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -156,7 +164,9 @@ public class ApiManager {
         return retrofit.create(FoodLogService.class);
     }
 
-    public ExerciseLogService getExerciseLogService(String authToken) {
+    public ExerciseLogService getExerciseLogService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
@@ -171,7 +181,9 @@ public class ApiManager {
         return retrofit.create(ExerciseLogService.class);
     }
 
-    public ExerciseService getExerciseService(String authToken) {
+    public ExerciseService getExerciseService(String token) {
+        String authToken = Credentials.basic(token, "unused");
+
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
