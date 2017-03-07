@@ -1,4 +1,4 @@
-package com.example.alex.glucosecoach.services;
+package com.example.alex.glucosecoach.auth;
 
 import java.io.IOException;
 

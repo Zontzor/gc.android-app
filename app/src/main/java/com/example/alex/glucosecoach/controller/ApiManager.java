@@ -1,9 +1,6 @@
 package com.example.alex.glucosecoach.controller;
 
-import android.text.TextUtils;
-
-import com.example.alex.glucosecoach.models.ExerciseLog;
-import com.example.alex.glucosecoach.services.AuthenticationInterceptor;
+import com.example.alex.glucosecoach.auth.AuthenticationInterceptor;
 import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.ExerciseLogService;
 import com.example.alex.glucosecoach.services.ExerciseService;
@@ -14,8 +11,6 @@ import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.FactService;
 import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
-
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;

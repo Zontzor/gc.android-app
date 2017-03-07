@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/list_item_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BG Value: "/>
+
+    <TextView
+        android:id="@+id/list_item_ins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insulin Dosage: "/>
+
+    <TextView
+        android:id="@+id/list_item_carbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carbs: "/>
+
+    <TextView
+        android:id="@+id/list_item_exer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exercise: "/>
+
+</LinearLayout>
