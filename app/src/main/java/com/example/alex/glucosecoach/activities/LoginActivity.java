@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        apiManager = new ApiManager();
+
         tokenManager = new TokenManager(this);
         userManager = new UserManager(this);
     }
@@ -89,7 +89,8 @@ public class LoginActivity extends AppCompatActivity {
         final String username = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        LoginService loginService = apiManager.getLoginService(username, password);
+        apiManager = new ApiManager(username, password);
+        LoginService loginService = apiManager.getLoginService();
         Call<Token> call = loginService.basicLogin();
         call.enqueue(new Callback<Token >() {
             @Override

@@ -92,7 +92,7 @@ public class SignupActivity extends AppCompatActivity {
 
         final User user = new User(username, email, password);
 
-        UserService userService = apiManager.getUserService("");
+        UserService userService = apiManager.getUserService();
         Call<String> call = userService.getUsername(user.getUsername());
         call.enqueue(new Callback<String >() {
             @Override
@@ -116,7 +116,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void onSignupSuccess(User user) {
-        UserService userService = apiManager.getUserService("");
+        UserService userService = apiManager.getUserService();
         Call<User> call = userService.postUser(user);
         call.enqueue(new Callback<User >() {
             @Override
@@ -136,7 +136,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Username already in use", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }

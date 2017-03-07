@@ -252,9 +252,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getUser() {
-        _apiManager = new ApiManager();
+        _apiManager = new ApiManager(_tokenManager.getToken());
         _userManager = new UserManager(_context);
-        UserService userService = _apiManager.getUserService(_tokenManager.getToken());
+        UserService userService = _apiManager.getUserService();
         Call<User> call = userService.getUser(_userManager.getUsername());
         call.enqueue(new Callback<User>() {
             @Override

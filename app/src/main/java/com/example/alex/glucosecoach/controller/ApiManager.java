@@ -38,17 +38,32 @@ public class ApiManager {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create());
 
-    public UserService getUserService(String token) {
-        String authToken = Credentials.basic(token, "unused");
+    private String authToken;
+    private AuthenticationInterceptor interceptor;
 
-        AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+    public ApiManager(){}
+
+    public ApiManager(String token) {
+        this.authToken = Credentials.basic(token, "unused");
+        this.interceptor = new AuthenticationInterceptor(this.authToken);
+
         httpClient.addInterceptor(interceptor);
 
         builder.client(httpClient.build());
         retrofit = builder.build();
-
-        return retrofit.create(UserService.class);
     }
+
+    public ApiManager(String username, String password) {
+        this.authToken = Credentials.basic(username, password);
+        this.interceptor = new AuthenticationInterceptor(this.authToken);
+
+        httpClient.addInterceptor(interceptor);
+
+        builder.client(httpClient.build());
+        retrofit = builder.build();
+    }
+
+    public UserService getUserService() {return retrofit.create(UserService.class);}
 
     public BGService getBGService(String token) {
         String authToken = Credentials.basic(token, "unused");
@@ -84,29 +99,7 @@ public class ApiManager {
         return retrofit.create(InsService.class);
     }
 
-    public LoginService getLoginService(String username, String password) {
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            String authToken = Credentials.basic(username, password);
-            return getLoginService(authToken);
-        }
-
-        return getLoginService(null);
-    }
-
-    public LoginService getLoginService(String authToken) {
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(LoginService.class);
-    }
+    public LoginService getLoginService() {return retrofit.create(LoginService.class);}
 
     public FactService getFactService(String token) {
         String authToken = Credentials.basic(token, "unused");
