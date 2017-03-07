@@ -44,4 +44,9 @@ public class Food {
     public void setF_carbs(Integer f_carbs) {
         this.f_carbs = f_carbs;
     }
+
+    @Override
+    public String toString() {
+        return (getF_name() + " - " + getF_carbs().toString() + "g");            // What to display in the Spinner list.
+    }
 }

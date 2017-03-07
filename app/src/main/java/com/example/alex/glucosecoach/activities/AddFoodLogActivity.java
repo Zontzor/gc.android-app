@@ -5,22 +5,28 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
+import com.example.alex.glucosecoach.models.Food;
 import com.example.alex.glucosecoach.models.FoodLog;
 import com.example.alex.glucosecoach.services.FoodLogService;
+import com.example.alex.glucosecoach.services.FoodService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +37,7 @@ import retrofit2.Response;
  */
 
 public class AddFoodLogActivity extends AppCompatActivity {
+    private Spinner _foodTypeSpin;
     private EditText _foodValueText;
     private EditText _foodTimeText;
     private Button _sumbitButton;
@@ -52,9 +59,12 @@ public class AddFoodLogActivity extends AppCompatActivity {
         _tokenManager = new TokenManager(this);
         _apiService = new ApiManager(_tokenManager.getToken());
 
+        _foodTypeSpin = (Spinner) findViewById(R.id.spin_food_type);
         _foodValueText = (EditText) findViewById(R.id.editText_food_value);
         _foodTimeText = (EditText) findViewById(R.id.editText_food_time);
         _sumbitButton = (Button) findViewById(R.id.btn_sumbit_food_log);
+
+        setSpinnerItems();
 
         Date date = new Date();
         String strDateFormat = "HH:mm";
@@ -87,8 +97,10 @@ public class AddFoodLogActivity extends AppCompatActivity {
                     return;
                 }
 
+                Food food = (Food) _foodTypeSpin.getSelectedItem();
+
                 FoodLog foodLog = new FoodLog(
-                        1,
+                        food.getId(),
                         Double.parseDouble(_foodValueText.getText().toString()),
                         formateDateTime(_foodTimeText.getText().toString()));
 
@@ -143,5 +155,41 @@ public class AddFoodLogActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date) + " " + time + ":00";
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void setSpinnerItems() {
+        FoodService foodService = _apiService.getFoodService();
+        Call<List<Food>> call = foodService.getFoods();
+        call.enqueue(new Callback<List<Food> >() {
+            @Override
+            public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+
+                if (response.isSuccessful()) {
+                    ArrayAdapter<Food> dataAdapter = new ArrayAdapter<>(AddFoodLogActivity.this,
+                            android.R.layout.simple_spinner_item, response.body());
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    _foodTypeSpin.setAdapter(dataAdapter);
+                } else {
+                    Log.d("exercises", "Failed to get exercises list");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Food>> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 }

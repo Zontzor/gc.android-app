@@ -8,6 +8,7 @@ import com.example.alex.glucosecoach.services.BGService;
 import com.example.alex.glucosecoach.services.ExerciseLogService;
 import com.example.alex.glucosecoach.services.ExerciseService;
 import com.example.alex.glucosecoach.services.FoodLogService;
+import com.example.alex.glucosecoach.services.FoodService;
 import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.FactService;
@@ -75,9 +76,11 @@ public class ApiManager {
 
     public ExerciseLogService getExerciseLogService() {return retrofit.create(ExerciseLogService.class);}
 
+    public FoodService getFoodService() {return retrofit.create(FoodService.class);}
+
+    public ExerciseService getExerciseService() {return retrofit.create(ExerciseService.class);}
+
     public FactService getFactService() {return retrofit.create(FactService.class);}
 
     public PredictionService getPredictionService() {return retrofit.create(PredictionService.class);}
-
-    public ExerciseService getExerciseService() {return retrofit.create(ExerciseService.class);}
 }
