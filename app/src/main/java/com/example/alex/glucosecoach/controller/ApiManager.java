@@ -65,22 +65,7 @@ public class ApiManager {
 
     public UserService getUserService() {return retrofit.create(UserService.class);}
 
-    public BGService getBGService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(BGService.class);
-    }
+    public BGService getBGService() {return retrofit.create(BGService.class);}
 
     public InsService getInsService(String token) {
         String authToken = Credentials.basic(token, "unused");

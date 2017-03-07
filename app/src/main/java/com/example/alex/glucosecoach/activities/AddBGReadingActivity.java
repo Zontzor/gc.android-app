@@ -43,12 +43,14 @@ public class AddBGReadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bg);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add BG Log");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Add BG Log");
+        }
 
-        _apiService = new ApiManager();
         _userManager = new UserManager(this);
         _tokenManager = new TokenManager(this);
+        _apiService = new ApiManager(_tokenManager.getToken());
 
         _bgValueText = (EditText) findViewById(R.id.editText_bg_value);
         _bgTimeText = (EditText) findViewById(R.id.editText_bg_time);
@@ -87,7 +89,7 @@ public class AddBGReadingActivity extends AppCompatActivity {
 
                 BGValue bgValue = new BGValue(Double.parseDouble(_bgValueText.getText().toString()), formateDateTime(_bgTimeText.getText().toString()));
 
-                BGService bgService = _apiService.getBGService(_tokenManager.getToken());
+                BGService bgService = _apiService.getBGService();
                 Call<BGValue> call = bgService.postBGReading(bgValue, _userManager.getUsername());
                 call.enqueue(new Callback<BGValue >() {
                     @Override
