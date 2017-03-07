@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    protected void onResume() {
+        super.onResume();
+
+        populateMainScreen();
+    }
+
     public void loadContent() {
         setContentView(R.layout.activity_main);
 
