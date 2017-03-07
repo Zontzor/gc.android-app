@@ -37,9 +37,10 @@
             android:theme="@style/AppTheme.AddValues">
         </activity>
         <activity android:name=".activities.AddFoodLogActivity"
-            android:theme="@style/AppTheme.AddValues"></activity>
+            android:theme="@style/AppTheme.AddValues"/>
         <activity android:name=".activities.AddExerciseLogActivity"
-            android:theme="@style/AppTheme.AddValues"></activity>
+            android:theme="@style/AppTheme.AddValues"/>
+        <activity android:name=".activities.LogbookActivity"/>
     </application>
 
 </manifest>

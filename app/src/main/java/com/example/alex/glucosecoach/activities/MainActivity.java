@@ -170,7 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_logbook) {
-
+            Intent logbookActivity = new Intent(MainActivity.this, LogbookActivity.class);
+            startActivity(logbookActivity);
         } else if (id == R.id.nav_charts) {
 
         } else if (id == R.id.nav_goals) {
