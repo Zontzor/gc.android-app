@@ -27,12 +27,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-    private static String BASE_URL = "http://147.252.145.189:5000/glucose_coach/api/v1.0/";
+    private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS);
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit retrofit;
 
@@ -96,9 +93,7 @@ public class ApiManager {
         return getLoginService(null);
     }
 
-    public LoginService getLoginService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
+    public LoginService getLoginService(String authToken) {
         if (!TextUtils.isEmpty(authToken)) {
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
 
