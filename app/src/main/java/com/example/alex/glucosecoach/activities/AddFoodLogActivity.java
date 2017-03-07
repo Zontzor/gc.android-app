@@ -43,12 +43,14 @@ public class AddFoodLogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_log);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add Food Log");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Add Food Log");
+        }
 
-        _apiService = new ApiManager();
         _userManager = new UserManager(this);
         _tokenManager = new TokenManager(this);
+        _apiService = new ApiManager(_tokenManager.getToken());
 
         _foodValueText = (EditText) findViewById(R.id.editText_food_value);
         _foodTimeText = (EditText) findViewById(R.id.editText_food_time);
@@ -90,7 +92,7 @@ public class AddFoodLogActivity extends AppCompatActivity {
                         Double.parseDouble(_foodValueText.getText().toString()),
                         formateDateTime(_foodTimeText.getText().toString()));
 
-                FoodLogService foodLogService = _apiService.getFoodLogService(_tokenManager.getToken());
+                FoodLogService foodLogService = _apiService.getFoodLogService();
                 Call<FoodLog> call = foodLogService.postFoodLog(foodLog, _userManager.getUsername());
                 call.enqueue(new Callback<FoodLog>() {
                     @Override

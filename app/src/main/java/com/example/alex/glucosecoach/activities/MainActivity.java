@@ -95,13 +95,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _txtExerciseValue = (TextView) findViewById(R.id.txt_last_exrc_value);
 
         // Create API Manager instance
-        _apiManager = new ApiManager();
+        _apiManager = new ApiManager(_tokenManager.getToken());
 
         _btnStartPredictionActivity = (Button) findViewById(R.id.btn_start_predicition);
         _btnStartPredictionActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FactService factService = _apiManager.getFactService(_tokenManager.getToken());
+                FactService factService = _apiManager.getFactService();
                 Call<Fact> call = factService.getFact(_userManager.getUsername());
                 call.enqueue(new Callback<Fact>() {
                     @Override
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (response.isSuccessful()) {
                             Fact fact = response.body();
 
-                            PredictionService predictionService = _apiManager.getPredictionService(_tokenManager.getToken());
+                            PredictionService predictionService = _apiManager.getPredictionService();
                             Call<Float> call2 = predictionService.getPrediction(fact, _userManager.getUsername());
                             call2.enqueue(new Callback<Float>() {
                                 @Override
@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void populateMainScreen() {
         // Populate main screen with data
-        FactService factService = _apiManager.getFactService(_tokenManager.getToken());
+        FactService factService = _apiManager.getFactService();
         Call<Fact> call = factService.getFact(_userManager.getUsername());
         call.enqueue(new Callback<Fact>() {
             @Override

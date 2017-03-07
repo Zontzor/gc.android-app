@@ -48,12 +48,14 @@ public class AddInsulinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insulin);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add Insulin Log");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Add Insulin Log");
+        }
 
-        _apiManager = new ApiManager();
         _userManager = new UserManager(this);
         _tokenManager = new TokenManager(this);
+        _apiManager = new ApiManager(_tokenManager.getToken());
 
         _insTypeRadio = (RadioGroup) findViewById(R.id.radio_ins_type);
         _insValueText = (EditText) findViewById(R.id.editText_ins_value);
@@ -96,7 +98,7 @@ public class AddInsulinActivity extends AppCompatActivity {
 
                 InsValue insValue = new InsValue(_insTypeRadioButton.getText().toString(), Double.parseDouble(_insValueText.getText().toString()), formateDateTime(_insTimeText.getText().toString()));
 
-                InsService insService = _apiManager.getInsService(_tokenManager.getToken());
+                InsService insService = _apiManager.getInsService();
                 Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
                 call.enqueue(new Callback<InsValue >() {
                     @Override

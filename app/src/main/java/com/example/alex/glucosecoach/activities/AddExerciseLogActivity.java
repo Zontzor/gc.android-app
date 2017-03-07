@@ -54,12 +54,14 @@ public class AddExerciseLogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_log);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Add Exercise Log");
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Add Exercise Log");
+        }
 
-        _apiService = new ApiManager();
         _userManager = new UserManager(this);
         _tokenManager = new TokenManager(this);
+        _apiService = new ApiManager(_tokenManager.getToken());
 
         _exerTypeSpin = (Spinner) findViewById(R.id.spin_exercise_type);
         _exerValueText = (EditText) findViewById(R.id.editText_exer_value);
@@ -106,7 +108,7 @@ public class AddExerciseLogActivity extends AppCompatActivity {
                         Integer.parseInt(_exerValueText.getText().toString()),
                         formateDateTime(_exerTimeText.getText().toString()));
 
-                ExerciseLogService exerciseLogService = _apiService.getExerciseLogService(_tokenManager.getToken());
+                ExerciseLogService exerciseLogService = _apiService.getExerciseLogService();
                 Call<ExerciseLog> call = exerciseLogService.postExerciseLog(exerciseLog, _userManager.getUsername());
                 call.enqueue(new Callback<ExerciseLog>() {
                     @Override
@@ -171,7 +173,7 @@ public class AddExerciseLogActivity extends AppCompatActivity {
     }
 
     public void setSpinnerItems() {
-        ExerciseService exerciseService = _apiService.getExerciseService(_tokenManager.getToken());
+        ExerciseService exerciseService = _apiService.getExerciseService();
         Call<List<Exercise>> call = exerciseService.getExercises();
         call.enqueue(new Callback<List<Exercise> >() {
             @Override

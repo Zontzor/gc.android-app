@@ -63,111 +63,21 @@ public class ApiManager {
         retrofit = builder.build();
     }
 
+    public LoginService getLoginService() {return retrofit.create(LoginService.class);}
+
     public UserService getUserService() {return retrofit.create(UserService.class);}
 
     public BGService getBGService() {return retrofit.create(BGService.class);}
 
-    public InsService getInsService(String token) {
-        String authToken = Credentials.basic(token, "unused");
+    public InsService getInsService() {return retrofit.create(InsService.class);}
 
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
+    public FoodLogService getFoodLogService() {return retrofit.create(FoodLogService.class);}
 
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
+    public ExerciseLogService getExerciseLogService() {return retrofit.create(ExerciseLogService.class);}
 
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
+    public FactService getFactService() {return retrofit.create(FactService.class);}
 
-        return retrofit.create(InsService.class);
-    }
+    public PredictionService getPredictionService() {return retrofit.create(PredictionService.class);}
 
-    public LoginService getLoginService() {return retrofit.create(LoginService.class);}
-
-    public FactService getFactService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(FactService.class);
-    }
-
-    public PredictionService getPredictionService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(PredictionService.class);
-    }
-
-    public FoodLogService getFoodLogService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(FoodLogService.class);
-    }
-
-    public ExerciseLogService getExerciseLogService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(ExerciseLogService.class);
-    }
-
-    public ExerciseService getExerciseService(String token) {
-        String authToken = Credentials.basic(token, "unused");
-
-        if (!TextUtils.isEmpty(authToken)) {
-            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(authToken);
-
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor);
-
-                builder.client(httpClient.build());
-                retrofit = builder.build();
-            }
-        }
-
-        return retrofit.create(ExerciseService.class);
-    }
+    public ExerciseService getExerciseService() {return retrofit.create(ExerciseService.class);}
 }
