@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         _tokenManager = new TokenManager(_context);
+        _apiManager = new ApiManager(_tokenManager.getToken());
+        _userManager = new UserManager(_context);
 
         if (isLoggedIn()) {
             _userManager = new UserManager(_context);
@@ -259,8 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getUser() {
-        _apiManager = new ApiManager(_tokenManager.getToken());
-        _userManager = new UserManager(_context);
         UserService userService = _apiManager.getUserService();
         Call<User> call = userService.getUser(_userManager.getUsername());
         call.enqueue(new Callback<User>() {

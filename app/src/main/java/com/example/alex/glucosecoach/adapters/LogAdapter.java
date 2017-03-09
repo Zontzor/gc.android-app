@@ -27,17 +27,31 @@ public class LogAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View view = convertView;
+
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.log_item_option, null);
+        if (view == null) {
+            view = inflater.inflate(R.layout.log_item_option, parent, false);
+        }
 
+        TextView txtDate = (TextView) view.findViewById(R.id.list_item_date);
         TextView txtBGValue = (TextView) view.findViewById(R.id.list_item_bg);
         TextView txtInsValue = (TextView) view.findViewById(R.id.list_item_ins);
         TextView txtCarbsValue = (TextView) view.findViewById(R.id.list_item_carbs);
         TextView txtExerValue = (TextView) view.findViewById(R.id.list_item_exer);
 
-        txtBGValue.setText(facts.get(position).getBgValue().toString());
+        txtDate.setText(this.context.getString(R.string.fact_date, facts.get(position).getPfDate(),
+                facts.get(position).todToString(facts.get(position).getPfTimeOfDay())));
+        txtBGValue.setText(this.context.getString(R.string.fact_gb, facts.get(position)
+                .getBgValue().toString()));
+        txtInsValue.setText(this.context.getString(R.string.fact_ins, facts.get(position)
+                .getInsValue().toString()));
+        txtCarbsValue.setText(this.context.getString(R.string.fact_carbs, facts.get(position)
+                .getFoodValue().toString()));
+        txtExerValue.setText(this.context.getString(R.string.fact_exer, facts.get(position)
+                .getExerciseValue().toString()));
 
         return view;
     }

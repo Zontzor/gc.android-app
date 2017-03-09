@@ -40,6 +40,7 @@ public class Fact {
     }
 
     public void setPfDate(String pfDate) {
+
         this.pfDate = pfDate;
     }
 
@@ -89,5 +90,19 @@ public class Fact {
 
     public void setExerciseValue(Integer exerciseValue) {
         this.exerciseValue = exerciseValue;
+    }
+
+    public String todToString(int tod) {
+        if (tod == 1) {
+            return "Morning";
+        } else if (tod == 2) {
+            return "Afternoon";
+        } else if (tod == 3) {
+            return "Evening";
+        } else if (tod == 4) {
+            return "Night";
+        } else {
+            return "Undefined";
+        }
     }
 }

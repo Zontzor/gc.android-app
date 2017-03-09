@@ -6,4 +6,10 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_sign_out">Sign Out</string>
+
+    <string name="fact_date">Date: %1$s %2$s</string>
+    <string name="fact_gb">BG Value: %1$s</string>
+    <string name="fact_ins">Insulin Dosage: %1$s</string>
+    <string name="fact_carbs">Carbs: %1$s</string>
+    <string name="fact_exer">Exercise: %1$s</string>
 </resources>

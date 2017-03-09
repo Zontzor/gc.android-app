@@ -3,6 +3,7 @@ package com.example.alex.glucosecoach.activities;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.alex.glucosecoach.R;
@@ -65,5 +66,16 @@ public class LogbookActivity extends AppCompatActivity {
     public void populateList() {
         listView = (ListView) findViewById(R.id.menu_list_logbook);
         listView.setAdapter(new LogAdapter(this, facts));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
