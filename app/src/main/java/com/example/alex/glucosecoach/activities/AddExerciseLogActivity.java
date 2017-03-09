@@ -137,7 +137,7 @@ public class AddExerciseLogActivity extends AppCompatActivity {
         String bgValue = _exerValueText.getText().toString();
         String bgTime = _exerTimeText.getText().toString();
 
-        if (bgValue.isEmpty() || !bgValue.matches("^\\d{0,2}(?:\\.\\d)?$")) {
+        if (bgValue.isEmpty() || !bgValue.matches("(?<![-.])\\b[0-9]+\\b(?!\\.[0-9])")) {
             _exerValueText.setError("enter a valid value");
             valid = false;
         } else {
