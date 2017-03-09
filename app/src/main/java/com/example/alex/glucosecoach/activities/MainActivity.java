@@ -1,6 +1,7 @@
 package com.example.alex.glucosecoach.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,12 +24,18 @@ import com.example.alex.glucosecoach.controller.TokenManager;
 
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.models.Fact;
+import com.example.alex.glucosecoach.models.InsValue;
 import com.example.alex.glucosecoach.models.User;
 import com.example.alex.glucosecoach.services.FactService;
+import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,23 +125,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Fact fact = response.body();
 
                             PredictionService predictionService = _apiManager.getPredictionService();
-                            Call<Float> call2 = predictionService.getPrediction(fact, _userManager.getUsername());
-                            call2.enqueue(new Callback<Float>() {
+                            Call<Double> call2 = predictionService.getPrediction(fact, _userManager.getUsername());
+                            call2.enqueue(new Callback<Double>() {
                                 @Override
-                                public void onResponse(Call<Float> call, Response<Float> response) {
+                                public void onResponse(Call<Double> call, final Response<Double> response) {
                                     if (response.isSuccessful()) {
-                                        Float value = response.body();
+                                        new AlertDialog.Builder(_context)
+                                                .setTitle("Recommended Insulin")
+                                                .setMessage(response.body().toString())
+                                                .setNegativeButton(android.R.string.cancel, null) // dismisses by default
+                                                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                                                    @Override public void onClick(DialogInterface dialog, int which) {
+                                                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                                        Date date = new Date();
 
-                                        AlertDialog.Builder alert = new AlertDialog.Builder(_context);
-                                        alert.setTitle("Recommended Insulin");
-                                        alert.setMessage(value.toString());
-                                        alert.setPositiveButton("OK", null);
-                                        alert.show();
+                                                        InsValue insValue = new InsValue("novorapid", response.body(), dateFormat.format(date));
+
+                                                        InsService insService = _apiManager.getInsService();
+                                                        Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
+                                                        call.enqueue(new Callback<InsValue >() {
+                                                            @Override
+                                                            public void onResponse(Call<InsValue> call, Response<InsValue> response) {
+
+                                                                if (response.isSuccessful()) {
+                                                                    Log.d("insvalue", "Successful post");
+                                                                    populateMainScreen();
+                                                                } else {
+                                                                    Log.d("insvalue", "Unsuccessful post");
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<InsValue> call, Throwable t) {
+                                                                Log.d("Error", t.getMessage());
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                                .create()
+                                                .show();
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<Float> call, Throwable t) {
+                                public void onFailure(Call<Double> call, Throwable t) {
                                 }
                             });
                         }

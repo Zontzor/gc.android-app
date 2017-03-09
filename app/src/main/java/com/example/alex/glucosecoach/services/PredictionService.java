@@ -14,5 +14,5 @@ import retrofit2.http.Path;
 
 public interface PredictionService {
     @POST("predict/{username}")
-    Call<Float> getPrediction(@Body Fact fact, @Path("username") String username);
+    Call<Double> getPrediction(@Body Fact fact, @Path("username") String username);
 }
