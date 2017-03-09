@@ -37,5 +37,5 @@
     <color name="material_green">#2ecc71</color>
     <color name="material_blue">#3498db</color>
     <color name="material_purple">#9b59b6</color>
-
+    <color name="material_grey">#95a5a6</color>
 </resources>

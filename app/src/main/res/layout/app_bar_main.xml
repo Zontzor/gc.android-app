@@ -20,44 +20,51 @@
 
     <include layout="@layout/content_main" />
 
-    <com.sa90.materialarcmenu.ArcMenu
-        android:id="@+id/arcMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:tint="#FFFFFF"
-        app:menu_scr="@android:drawable/ic_input_add"
-        app:menu_open="arc_left"
-        app:menu_color="@color/darkGreen" >
+    <FrameLayout
+        android:id="@+id/frame_fab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item4_exercise"
+        <com.sa90.materialarcmenu.ArcMenu
+            android:id="@+id/arcMenu"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_exercise_24dp"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/softPurple" />
+            android:layout_gravity="bottom|end"
+            android:tint="#FFFFFF"
+            app:menu_scr="@android:drawable/ic_input_add"
+            app:menu_open="arc_left"
+            app:menu_color="@color/colorPrimary"
+            app:menu_animation_time="300">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item3_carbs"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_food_24dp"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@color/softBlue" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_menu_item4_exercise"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_exercise_24dp"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/material_purple" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item2_insulin"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_insulin_24dp"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@color/softGreen" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_menu_item3_carbs"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_food_24dp"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/material_blue" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_menu_item1_bg"
-            android:layout_width="wrap_content"
-            android:src="@drawable/ic_bg_reading_24dp"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@color/softRed" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_menu_item2_insulin"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_insulin_24dp"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/material_green" />
 
-    </com.sa90.materialarcmenu.ArcMenu>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_menu_item1_bg"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_bg_black_24dp"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/material_red" />
+
+        </com.sa90.materialarcmenu.ArcMenu>
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

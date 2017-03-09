@@ -3,10 +3,13 @@ package com.example.alex.glucosecoach.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.alex.glucosecoach.R;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
     private TextView _txtBGValue, _txtInsulinValue, _txtCarbsValue, _txtExerciseValue;
     private Button _btnStartPredictionActivity;
+    private FrameLayout _fabFrame;
 
     ApiManager _apiManager;
     TokenManager _tokenManager;
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Setup FAB menu
         _arcMenu = (ArcMenu) findViewById(arcMenu);
         setupFabListener();
+
+        _fabFrame = (FrameLayout) findViewById(R.id.frame_fab);
 
         // Setup FAB buttons
         _bgMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
@@ -230,12 +237,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
-                //Toast.makeText(getApplicationContext(), "Menu Opened", Toast.LENGTH_SHORT).show();
+                _fabFrame.setBackgroundColor(ContextCompat.getColor(_context, R.color.transparentGray));
+                _fabFrame.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        if (_arcMenu.isMenuOpened()) {
+                            _arcMenu.toggleMenu();
+                        }
+
+                        return true;
+                    }
+                });
             }
 
             @Override
             public void onMenuClosed() {
-                //Toast.makeText(getApplicationContext(), "Menu Closed", Toast.LENGTH_SHORT).show();
+                _fabFrame.setBackgroundColor(Color.TRANSPARENT);
             }
         });
     }
@@ -331,10 +348,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(Call<Fact> call, Response<Fact> response) {
                 if (response.isSuccessful()) {
                     Fact fact = response.body();
-                    _txtBGValue.setText(fact.getBgValue().toString());
-                    _txtInsulinValue.setText(fact.getInsValue().toString());
-                    _txtCarbsValue.setText(fact.getFoodValue().toString());
-                    _txtExerciseValue.setText(fact.getExerciseValue().toString());
+                    _txtBGValue.setText(getString(R.string.main_bg, fact.getBgValue().toString()));
+                    _txtInsulinValue.setText(getString(R.string.main_ins, fact.getInsValue().toString()));
+                    _txtCarbsValue.setText(getString(R.string.main_carbs, fact.getFoodValue().toString()));
+                    _txtExerciseValue.setText(getString(R.string.main_exer, fact.getExerciseValue().toString()));
                 }
             }
 
