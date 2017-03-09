@@ -3,7 +3,7 @@
     <color name="colorPrimary">#2196F3</color>
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorPrimaryLight">#BBDEFB</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorAccent">#FFFFFF</color>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
     <color name="iconColor">#FFFFFF</color>
@@ -32,4 +32,10 @@
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="material_red">#e74c3c</color>
+    <color name="material_green">#2ecc71</color>
+    <color name="material_blue">#3498db</color>
+    <color name="material_purple">#9b59b6</color>
+
 </resources>
