@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.fragments.HomeFragment;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtName, txtWebsite;
     private Toolbar toolbar;
+    private Menu menu;
     private ArcMenu fab;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
     private FrameLayout _fabFrame;
@@ -46,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG_HOME = "home";
     private static final String TAG_LOGBOOK = "logbook";
     private static final String TAG_CHARTS = "charts";
-    private static final String TAG_GOALS = "goals";
     private static final String TAG_SETTINGS = "settings";
     public static String CURRENT_TAG = TAG_HOME;
 
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
+
+    UserManager _userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
+        _userManager = new UserManager(this);
+
         // load nav menu header data
         loadNavHeader();
 
@@ -107,9 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
-        // name, website
-        txtName.setText("Alex Kiernan");
-        txtWebsite.setText("test@test.com");
+        txtName.setText(_userManager.getUsername());
+        txtWebsite.setText(_userManager.getEmail());
     }
 
     /***
@@ -123,8 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // set toolbar title
         setToolbarTitle();
 
-        // if user select the current navigation menu again, don't do anything
-        // just close the navigation drawer
+        // if user select the current navigation menu again, close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
 
@@ -133,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        // Load fragment in seperate thread
+        // load fragment in separate thread
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // show or hide the fab button
         toggleFab();
 
-        //Closing drawer on item click
+        // close drawer on item click
         drawer.closeDrawers();
 
         // refresh toolbar menu
@@ -167,18 +171,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return homeFragment;
             /*case 1:
                 // photos
-                PhotosFragment photosFragment = new PhotosFragment();
+                LogbookFragment photosFragment = new PhotosFragment();
                 return photosFragment;
             case 2:
                 // movies fragment
-                MoviesFragment moviesFragment = new MoviesFragment();
+                ChartsFragment moviesFragment = new MoviesFragment();
                 return moviesFragment;
             case 3:
-                // notifications fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
-
-            case 4:
                 // settings fragment
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;*/
@@ -210,20 +209,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;/*
-                    case R.id.nav_photos:
+                    case R.id.nav_logbook:
                         navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
+                        CURRENT_TAG = TAG_Logbook;
                         break;
-                    case R.id.nav_movies:
+                    case R.id.nav_charts:
                         navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
+                        CURRENT_TAG = TAG_Charts;
                         break;
-                    case R.id.nav_notifications:
+                    case R.id.settings:
                         navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;
-                    case R.id.nav_settings:
-                        navItemIndex = 4;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;*/
                     default:
@@ -260,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
 
         //Setting the actionbarToggle to drawer layout
-        drawer.setDrawerListener(actionBarDrawerToggle);
+        drawer.addDrawerListener(actionBarDrawerToggle);
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
@@ -289,6 +284,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -302,14 +304,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(logbookActivity);
         } else if (id == R.id.nav_charts) {
 
-        } else if (id == R.id.nav_goals) {
-
         } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_signout) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -317,7 +313,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(loginActivity);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void setupFabListener() {
         fab.setStateChangeListener(new StateChangeListener() {

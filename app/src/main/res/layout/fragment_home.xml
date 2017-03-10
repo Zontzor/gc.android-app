@@ -38,8 +38,8 @@
                 android:id="@+id/txt_last_bg_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BG Value"
-                android:textSize="20dp"
+                android:text="@string/placeholder"
+                android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="100dp"/>
@@ -68,8 +68,8 @@
                 android:id="@+id/txt_last_ins_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Insulin"
-                android:textSize="20dp"
+                android:text="@string/placeholder"
+                android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="100dp" />
@@ -98,8 +98,8 @@
                 android:id="@+id/txt_last_carbs_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Food"
-                android:textSize="20dp"
+                android:text="@string/placeholder"
+                android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="100dp" />
@@ -128,8 +128,8 @@
                 android:id="@+id/txt_last_exrc_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exercise"
-                android:textSize="20dp"
+                android:text="@string/placeholder"
+                android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="100dp" />
@@ -142,7 +142,7 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:padding="12dp"
-            android:text="Get Insulin Value"
+            android:text="@string/get_prediction"
             android:textColor="@color/white"
             android:background="@color/material_grey"/>
 

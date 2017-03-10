@@ -8,9 +8,8 @@
 
     <!-- Navigation Drawer menu labels -->
     <string name="nav_home">Home</string>
-    <string name="nav_photos">Logbook</string>
-    <string name="nav_movies">Charts</string>
-    <string name="nav_notifications">Goals</string>
+    <string name="nav_logbook">Logbook</string>
+    <string name="nav_charts">Charts</string>
     <string name="nav_settings">Settings</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
@@ -18,11 +17,9 @@
         <item>Home</item>
         <item>Logbook</item>
         <item>Charts</item>
-        <item>Goals</item>
         <item>Settings</item>
     </string-array>
 
-    <string name="action_settings">Settings</string>
     <string name="action_sign_out">Sign Out</string>
 
     <string name="main_bg">%1$s</string>
@@ -36,6 +33,7 @@
     <string name="fact_carbs">Carbs: %1$s</string>
     <string name="fact_exer">Exercise: %1$s</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="placeholder">Placeholder</string>
+
+    <string name="get_prediction">Get Insulin Value</string>
 </resources>

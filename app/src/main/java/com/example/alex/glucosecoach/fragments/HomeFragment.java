@@ -43,9 +43,7 @@ public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +61,7 @@ public class HomeFragment extends Fragment {
         if (isLoggedIn()) {
             _apiManager = new ApiManager(_tokenManager.getToken());
             _userManager = new UserManager(getActivity());
+
             // Setup Main Screen Text Views
             _txtBGValue = (TextView) view.findViewById(R.id.txt_last_bg_value);
             _txtInsulinValue = (TextView) view.findViewById(R.id.txt_last_ins_value);
