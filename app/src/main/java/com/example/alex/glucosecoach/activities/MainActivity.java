@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.fragments.HomeFragment;
 import com.example.alex.glucosecoach.fragments.LogbookFragment;
@@ -61,10 +62,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Handler mHandler;
 
     UserManager _userManager;
+    TokenManager _tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        _userManager = new UserManager(this);
+        _tokenManager = new TokenManager(this);
+
+        if (!isLoggedIn()) {
+            startLoginActivity();
+        }
+
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,14 +86,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab = (ArcMenu) findViewById(arcMenu);
         setupFabListener();
 
-        // Setup FAB buttons
+        // setup FAB buttons
         _bgMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item1_bg);
         _insMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item2_insulin);
         _carbsMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item3_carbs);
         _exerMenuItem = (FloatingActionButton) findViewById(R.id.fab_menu_item4_exercise);
         setupFabMenuItemsListeners();
 
-        // Navigation view header
+        // navigation view header
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.txt_header_username);
         txtWebsite = (TextView) navHeader.findViewById(R.id.txt_header_email);
@@ -92,12 +102,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
 
-        _userManager = new UserManager(this);
-
         // load nav menu header data
         loadNavHeader();
 
-        // initializing navigation menu
+        // initialize navigation menu
         setUpNavigationView();
 
         if (savedInstanceState == null) {
@@ -111,12 +119,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
         toggleFab();
+
+        if (!isLoggedIn()) {
+            startLoginActivity();
+        }
     }
 
     /***
      * Load navigation menu header information
-     * like background image, profile image
-     * name, website, notifications action view (dot)
      */
     private void loadNavHeader() {
         txtName.setText(_userManager.getUsername());
@@ -124,17 +134,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /***
-     * Returns respected fragment that user
-     * selected from navigation menu
+     * Returns selected fragment from navigation menu
      */
     private void loadHomeFragment() {
-        // selecting appropriate nav menu item
+        // select appropriate nav menu item
         selectNavMenu();
 
         // set toolbar title
         setToolbarTitle();
 
-        // if user select the current navigation menu again, close the navigation drawer
+        // close the navigation drawer if fragment selected again
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
 
@@ -147,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                // update the main content by replacing fragments
+                // update main content by replacing fragments
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
@@ -197,16 +206,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUpNavigationView() {
-        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        // handle item click on navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                //Check to see which item was being clicked and perform appropriate action
+                // handle nav item click
                 switch (menuItem.getItemId()) {
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
@@ -245,21 +253,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                // drawer close
                 super.onDrawerClosed(drawerView);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                // drawer open
                 super.onDrawerOpened(drawerView);
             }
         };
 
-        //Setting the actionbarToggle to drawer layout
+        // set the actionbarToggle to drawer layout
         drawer.addDrawerListener(actionBarDrawerToggle);
 
-        //calling sync state is necessary or else your hamburger icon wont show up
+        // calling sync state to update hamburger icon
         actionBarDrawerToggle.syncState();
     }
 
@@ -270,11 +278,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-        // This code loads home fragment when back key is pressed
-        // when user is in other fragment than home
+        // loads home fragment when back key is pressed when user is in other fragment
         if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
+            // check if user is on other navigation menu
             if (navItemIndex != 0) {
                 navItemIndex = 0;
                 CURRENT_TAG = TAG_HOME;
@@ -301,16 +307,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // handle action bar item clicks
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent loginActivity = new Intent(this, LoginActivity.class);
-            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginActivity);
+            startLoginActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -386,5 +387,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (fab.isMenuOpened()) {
             fab.toggleMenu();
         }
+    }
+
+    public boolean isLoggedIn() {
+        return _tokenManager.hasToken();
+    }
+
+    public void startLoginActivity() {
+        Intent loginActivity = new Intent(this, LoginActivity.class);
+        loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginActivity);
     }
 }

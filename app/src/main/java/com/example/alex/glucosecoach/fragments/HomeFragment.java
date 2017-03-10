@@ -134,6 +134,8 @@ public class HomeFragment extends Fragment {
                                     public void onFailure(Call<Double> call, Throwable t) {
                                     }
                                 });
+                            } else if (response.code() == 401) {
+                                startLoginActivity();
                             }
                         }
 
@@ -144,9 +146,7 @@ public class HomeFragment extends Fragment {
                 }
             });
         } else {
-            Intent loginActivity = new Intent(getActivity(), LoginActivity.class);
-            loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginActivity);
+            startLoginActivity();
         }
 
         return view;
@@ -180,6 +180,8 @@ public class HomeFragment extends Fragment {
                     _txtInsulinValue.setText(getString(R.string.main_ins, fact.getInsValue().toString()));
                     _txtCarbsValue.setText(getString(R.string.main_carbs, fact.getFoodValue().toString()));
                     _txtExerciseValue.setText(getString(R.string.main_exer, fact.getExerciseValue().toString()));
+                } else if (response.code() == 401) {
+                    startLoginActivity();
                 }
             }
 
@@ -191,5 +193,11 @@ public class HomeFragment extends Fragment {
 
     public boolean isLoggedIn() {
         return _tokenManager.hasToken();
+    }
+
+    public void startLoginActivity() {
+        Intent loginActivity = new Intent(getActivity(), LoginActivity.class);
+        loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginActivity);
     }
 }
