@@ -79,40 +79,46 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Cleanup overlay
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
+                R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
         final String username = _usernameText.getText().toString();
-        String password = _passwordText.getText().toString();
+        final String password = _passwordText.getText().toString();
 
-        apiManager = new ApiManager(username, password);
-        LoginService loginService = apiManager.getLoginService();
-        Call<Token> call = loginService.basicLogin();
-        call.enqueue(new Callback<Token >() {
-            @Override
-            public void onResponse(Call<Token> call, Response<Token> response) {
-                progressDialog.dismiss();
 
-                if (response.isSuccessful()) {
-                    Token token = response.body();
-                    Log.d("token", token.getTokenValue());
-                    onLoginSuccess(token, username);
-                } else {
-                    onLoginFailed();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Token> call, Throwable t) {
-                progressDialog.dismiss();
-                onLoginFailed();
-                Log.d("Server connect error", t.getMessage());
-            }
-        });
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        apiManager = new ApiManager(username, password);
+                        LoginService loginService = apiManager.getLoginService();
+                        Call<Token> call = loginService.basicLogin();
+                        call.enqueue(new Callback<Token >() {
+                            @Override
+                            public void onResponse(Call<Token> call, Response<Token> response) {
+                                progressDialog.dismiss();
+
+                                if (response.isSuccessful()) {
+                                    Token token = response.body();
+                                    Log.d("token", token.getTokenValue());
+                                    onLoginSuccess(token, username);
+                                } else {
+                                    onLoginFailed();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Token> call, Throwable t) {
+                                progressDialog.dismiss();
+                                onLoginFailed();
+                                Log.d("Server connect error", t.getMessage());
+                            }
+                        });
+                    }
+                }, 3000);
     }
 
 
@@ -120,9 +126,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
         }
@@ -130,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // disable going back to the MainActivity
+        // disable going back to MainActivity
         moveTaskToBack(true);
     }
 
@@ -139,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
         tokenManager.setToken(token.getTokenValue());
         userManager.setUsername(username);
 
-        Toast.makeText(getBaseContext(), "Login success", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
         Intent mainActivity = new Intent(this, MainActivity.class);
         mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainActivity);
@@ -147,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
     }
 
     public boolean validate() {
