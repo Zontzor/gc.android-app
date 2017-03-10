@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.fragments.HomeFragment;
+import com.example.alex.glucosecoach.fragments.LogbookFragment;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private ArcMenu fab;
     private FloatingActionButton _bgMenuItem, _insMenuItem, _carbsMenuItem, _exerMenuItem;
-    private FrameLayout _fabFrame;
+
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         fab = (ArcMenu) findViewById(arcMenu);
-        _fabFrame = (FrameLayout) findViewById(R.id.frame_fab);
         setupFabListener();
 
         // Setup FAB buttons
@@ -105,6 +105,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toggleFab();
     }
 
     /***
@@ -144,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // update the main content by replacing fragments
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out);
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
                 fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
@@ -166,19 +172,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
                 HomeFragment homeFragment = new HomeFragment();
                 return homeFragment;
-            /*case 1:
-                // photos
-                LogbookFragment photosFragment = new PhotosFragment();
-                return photosFragment;
-            case 2:
-                // movies fragment
-                ChartsFragment moviesFragment = new MoviesFragment();
-                return moviesFragment;
+            case 1:
+                LogbookFragment logbookFragment = new LogbookFragment();
+                return logbookFragment;
+            /*case 2:
+                ChartsFragment chartsFragment = new ChartsFragment();
+                return chartsFragment;
             case 3:
-                // settings fragment
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;*/
             default:
@@ -208,11 +210,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.nav_home:
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
-                        break;/*
+                        break;
                     case R.id.nav_logbook:
                         navItemIndex = 1;
-                        CURRENT_TAG = TAG_Logbook;
-                        break;
+                        CURRENT_TAG = TAG_LOGBOOK;
+                        break;/*
                     case R.id.nav_charts:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_Charts;
@@ -294,22 +296,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_logbook) {
-            Intent logbookActivity = new Intent(MainActivity.this, LogbookActivity.class);
-            startActivity(logbookActivity);
-        } else if (id == R.id.nav_charts) {
-
-        } else if (id == R.id.nav_settings) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -331,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupFabListener() {
+        final FrameLayout _fabFrame = (FrameLayout) findViewById(R.id.frame_fab);
+
         fab.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
@@ -350,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onMenuClosed() {
                 _fabFrame.setBackgroundColor(Color.TRANSPARENT);
+                _fabFrame.setOnTouchListener(null);
             }
         });
     }
@@ -358,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _bgMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleFab();
                 Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
                 startActivity(addBGReadingActivity);
             }
@@ -366,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _insMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleFab();
                 Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
                 startActivity(addInsulinActivity);
             }
@@ -374,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _carbsMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleFab();
                 Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
                 startActivity(addCarbsActivity);
             }
@@ -382,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         _exerMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleFab();
                 Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
                 startActivity(addExerciseActivity);
             }

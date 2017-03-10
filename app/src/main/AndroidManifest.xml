@@ -40,7 +40,6 @@
             android:theme="@style/AppTheme.AddValues"/>
         <activity android:name=".activities.AddExerciseLogActivity"
             android:theme="@style/AppTheme.AddValues"/>
-        <activity android:name=".activities.LogbookActivity"/>
     </application>
 
 </manifest>
