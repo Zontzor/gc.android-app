@@ -28,7 +28,7 @@
     <string name="main_exer">%1$s</string>
 
     <string name="fact_date">%1$s %2$s</string>
-    <string name="fact_gb">BG Value: %1$s</string>
+    <string name="fact_bg">BG Value: %1$s</string>
     <string name="fact_ins">Insulin Dosage: %1$s</string>
     <string name="fact_carbs">Carbs: %1$s</string>
     <string name="fact_exer">Exercise: %1$s</string>

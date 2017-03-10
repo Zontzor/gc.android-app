@@ -44,7 +44,7 @@ public class LogAdapter extends BaseAdapter {
 
         txtDate.setText(this.context.getString(R.string.fact_date, facts.get(position).getPfDate(),
                 facts.get(position).todToString(facts.get(position).getPfTimeOfDay())));
-        txtBGValue.setText(this.context.getString(R.string.fact_gb, facts.get(position)
+        txtBGValue.setText(this.context.getString(R.string.fact_bg, facts.get(position)
                 .getBgValue().toString()));
         txtInsValue.setText(this.context.getString(R.string.fact_ins, facts.get(position)
                 .getInsValue().toString()));
@@ -63,7 +63,7 @@ public class LogAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return position;
+        return facts.get(position);
     }
 
     @Override

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.alex.glucosecoach.R;
@@ -50,6 +52,7 @@ public class LogbookFragment extends Fragment {
             public void onResponse(Call<List<Fact>> call, Response<List<Fact>> response) {
                 if (response.isSuccessful()) {
                     listView.setAdapter(new LogAdapter(getActivity(), response.body()));
+                    setListViewListener();
                 }
             }
 
@@ -58,7 +61,33 @@ public class LogbookFragment extends Fragment {
             }
         });
 
+
+
         return view;
+    }
+
+    public void setListViewListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Fact fact = (Fact) adapterView.getAdapter().getItem(position);
+
+                StringBuilder sb = new StringBuilder();
+                sb.append(getString(R.string.fact_bg, fact.getBgValue().toString()));
+                sb.append("\n");
+                sb.append(getString(R.string.fact_ins, fact.getInsValue().toString()));
+                sb.append("\n");
+                sb.append(getString(R.string.fact_carbs, fact.getFoodValue().toString()));
+                sb.append("\n");
+                sb.append(getString(R.string.fact_exer, fact.getExerciseValue().toString()));
+
+                new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.fact_date, fact.getPfDate(), fact.todToString(fact.getPfTimeOfDay())))
+                        .setMessage(sb)
+                    .create()
+                    .show();
+            }
+        });
     }
 
     @Override
@@ -68,4 +97,4 @@ public class LogbookFragment extends Fragment {
     public void onDetach() {super.onDetach();}
 
     public interface OnFragmentInteractionListener {void onFragmentInteraction(Uri uri);}
-}
+ }
