@@ -25,8 +25,10 @@ import android.widget.TextView;
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
+import com.example.alex.glucosecoach.fragments.ChartsFragment;
 import com.example.alex.glucosecoach.fragments.HomeFragment;
 import com.example.alex.glucosecoach.fragments.LogbookFragment;
+import com.example.alex.glucosecoach.fragments.SettingsFragment;
 import com.sa90.materialarcmenu.ArcMenu;
 import com.sa90.materialarcmenu.StateChangeListener;
 
@@ -186,12 +188,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 1:
                 LogbookFragment logbookFragment = new LogbookFragment();
                 return logbookFragment;
-            /*case 2:
+            case 2:
                 ChartsFragment chartsFragment = new ChartsFragment();
                 return chartsFragment;
             case 3:
                 SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;*/
+                return settingsFragment;
             default:
                 return new HomeFragment();
         }
@@ -222,15 +224,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case R.id.nav_logbook:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_LOGBOOK;
-                        break;/*
+                        break;
                     case R.id.nav_charts:
                         navItemIndex = 2;
-                        CURRENT_TAG = TAG_Charts;
+                        CURRENT_TAG = TAG_CHARTS;
                         break;
-                    case R.id.settings:
+                    case R.id.nav_settings:
                         navItemIndex = 3;
                         CURRENT_TAG = TAG_SETTINGS;
-                        break;*/
+                        break;
                     default:
                         navItemIndex = 0;
                 }
