@@ -27,7 +27,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChartsFragment extends Fragment {
-    int randomint = 9;
 
     public ChartsFragment() {}
 

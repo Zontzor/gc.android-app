@@ -15,4 +15,7 @@ import retrofit2.http.Path;
 public interface PredictionService {
     @POST("predict/{username}")
     Call<Double> getPrediction(@Body Fact fact, @Path("username") String username);
+
+    @GET("train/{username}")
+    Call<Void> trainModel(@Path("username") String username);
 }
