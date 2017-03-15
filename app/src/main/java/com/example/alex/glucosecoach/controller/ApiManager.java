@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiManager {
 
-    private static String BASE_URL = "http://192.168.1.101:5000/glucose_coach/api/v1.0/";
+    private static String BASE_URL = "http://ec2-34-248-62-100.eu-west-1.compute.amazonaws.com:5000/glucose_coach/api/v1.0/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
