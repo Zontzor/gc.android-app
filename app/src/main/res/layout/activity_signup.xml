@@ -28,7 +28,8 @@
             <EditText android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username" />
+                android:hint="Username"
+                android:textColor="@color/iconColor"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--  Email Label -->
@@ -41,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email" />
+                android:hint="Email"
+                android:textColor="@color/iconColor"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->
@@ -54,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password"
+                android:textColor="@color/iconColor"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Re-enter Label -->
@@ -67,7 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Re-enter Password"/>
+                android:hint="Re-enter Password"
+                android:textColor="@color/iconColor"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Signup Button -->

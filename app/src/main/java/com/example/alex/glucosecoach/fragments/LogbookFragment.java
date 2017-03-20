@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.adapters.LogAdapter;
@@ -43,6 +44,8 @@ public class LogbookFragment extends Fragment {
         TokenManager _tokenManager = new TokenManager(getActivity());
         ApiManager _apiManager = new ApiManager(_tokenManager.getToken());
 
+        final Context context = this.getContext();
+
         listView = (ListView) view.findViewById(R.id.menu_list_logbook);
 
         FactService factService = _apiManager.getFactService();
@@ -50,9 +53,11 @@ public class LogbookFragment extends Fragment {
         call.enqueue(new Callback<List<Fact>>() {
             @Override
             public void onResponse(Call<List<Fact>> call, Response<List<Fact>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body().size() != 0) {
                     listView.setAdapter(new LogAdapter(getActivity(), response.body()));
                     setListViewListener();
+                } else {
+                    Toast.makeText(context, "No Data", Toast.LENGTH_LONG).show();
                 }
             }
 

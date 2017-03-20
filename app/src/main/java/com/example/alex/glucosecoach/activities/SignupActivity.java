@@ -80,7 +80,7 @@ public class SignupActivity extends AppCompatActivity {
         //_signupButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme);
+                R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
@@ -92,26 +92,32 @@ public class SignupActivity extends AppCompatActivity {
 
         final User user = new User(username, email, password);
 
-        UserService userService = apiManager.getUserService();
-        Call<String> call = userService.getUsername(user.getUsername());
-        call.enqueue(new Callback<String >() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                progressDialog.dismiss();
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        UserService userService = apiManager.getUserService();
+                        Call<String> call = userService.getUsername(user.getUsername());
+                        call.enqueue(new Callback<String >() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                progressDialog.dismiss();
 
-                if (!response.isSuccessful()) {
-                    onSignupSuccess(user);
-                } else {
-                    _usernameText.setError("Username already in use");
-                    onSignupFailed();
-                }
-            }
+                                if (!response.isSuccessful()) {
+                                    onSignupSuccess(user);
+                                } else {
+                                    _usernameText.setError("Username already in use");
+                                    onSignupFailed();
+                                }
+                            }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Log.d("Error", t.getMessage());
+                            }
+                        });
+                    }
+                }, 3000);
     }
 
 
@@ -136,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Username already in use", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Username already in use", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
@@ -188,10 +194,10 @@ public class SignupActivity extends AppCompatActivity {
 
     public void goToSignin() {
         _signupButton.setEnabled(true);
-        Toast.makeText(getBaseContext(), "Signup success", Toast.LENGTH_LONG).show();
-        Intent mainActivity = new Intent(this, LoginActivity.class);
-        mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainActivity);
+        Toast.makeText(getApplicationContext(), "Signup success", Toast.LENGTH_LONG).show();
+        Intent LoginActivity = new Intent(this, LoginActivity.class);
+        LoginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(LoginActivity);
         finish();
     }
 }

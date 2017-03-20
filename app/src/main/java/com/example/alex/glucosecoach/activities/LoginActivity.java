@@ -88,8 +88,6 @@ public class LoginActivity extends AppCompatActivity {
         final String username = _usernameText.getText().toString();
         final String password = _passwordText.getText().toString();
 
-
-
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -119,16 +117,6 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }
                 }, 3000);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                this.finish();
-            }
-        }
     }
 
     @Override

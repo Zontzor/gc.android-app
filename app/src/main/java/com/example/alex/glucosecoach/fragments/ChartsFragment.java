@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.graphics.Color;
+import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.adapters.LogAdapter;
@@ -45,12 +46,14 @@ public class ChartsFragment extends Fragment {
         TokenManager _tokenManager = new TokenManager(getActivity());
         ApiManager _apiManager = new ApiManager(_tokenManager.getToken());
 
+        final Context context = this.getContext();
+
         FactService factService = _apiManager.getFactService();
         Call<List<Fact>> call = factService.getFacts(_userManager.getUsername());
         call.enqueue(new Callback<List<Fact>>() {
             @Override
             public void onResponse(Call<List<Fact>> call, Response<List<Fact>> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body().size() != 0) {
                     List<Fact> facts = response.body();
                     ArrayList<Float> dataList = new ArrayList<>();
 
@@ -72,6 +75,8 @@ public class ChartsFragment extends Fragment {
                     ArrayList<ArrayList<Float>> dataLists = new ArrayList<>();
                     dataLists.add(dataList);
                     lineView.setFloatDataList(dataLists);
+                } else {
+                    Toast.makeText(context, "No Data", Toast.LENGTH_LONG).show();
                 }
             }
 
