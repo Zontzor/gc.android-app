@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 /**
  * Created by alex on 2/5/17.
+ *
+ * Helper class to handle tokens
  */
 
 public class TokenManager {

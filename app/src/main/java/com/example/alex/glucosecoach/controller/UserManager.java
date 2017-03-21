@@ -8,6 +8,8 @@ import com.example.alex.glucosecoach.models.User;
 
 /**
  * Created by alex on 2/6/17.
+ *
+ * Helper class for managing users
  */
 
 public class UserManager {
@@ -28,24 +30,22 @@ public class UserManager {
     }
 
     public String getUsername() {
-        String username = settings.getString("username", ""/*default value*/);
-        return username;
+        return settings.getString("username", ""/*default value*/);
     }
 
     public void setUsername(String username) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("username", username);
-        editor.commit();
+        editor.apply();
     }
 
     public String getEmail() {
-        String email = settings.getString("email", ""/*default value*/);
-        return email;
+        return settings.getString("email", ""/*default value*/);
     }
 
     public void setEmail(String email) {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("email", email);
-        editor.commit();
+        editor.apply();
     }
 }
