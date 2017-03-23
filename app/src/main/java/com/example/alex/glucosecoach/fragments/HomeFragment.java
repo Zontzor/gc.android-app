@@ -92,41 +92,8 @@ public class HomeFragment extends Fragment {
                                     @Override
                                     public void onResponse(Call<Double> call, final Response<Double> response) {
                                         if (response.isSuccessful()) {
-                                            new AlertDialog.Builder(getActivity())
-                                                    .setTitle("Recommended Insulin")
-                                                    .setMessage(response.body().toString())
-                                                    .setNegativeButton(android.R.string.cancel, null) // dismisses by default
-                                                    .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                                            Date date = new Date();
-
-                                                            InsValue insValue = new InsValue("novorapid", response.body(), dateFormat.format(date));
-
-                                                            InsService insService = _apiManager.getInsService();
-                                                            Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
-                                                            call.enqueue(new Callback<InsValue>() {
-                                                                @Override
-                                                                public void onResponse(Call<InsValue> call, Response<InsValue> response) {
-
-                                                                    if (response.isSuccessful()) {
-                                                                        Log.d("insvalue", "Successful post");
-                                                                        populateMainScreen();
-                                                                    } else {
-                                                                        Log.d("insvalue", "Unsuccessful post");
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onFailure(Call<InsValue> call, Throwable t) {
-                                                                    Log.d("Error", t.getMessage());
-                                                                }
-                                                            });
-                                                        }
-                                                    })
-                                                    .create()
-                                                    .show();
+                                            Double insulinValue = response.body();
+                                            createDialog(insulinValue);
                                         }
                                     }
 
@@ -199,5 +166,43 @@ public class HomeFragment extends Fragment {
         Intent loginActivity = new Intent(getActivity(), LoginActivity.class);
         loginActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginActivity);
+    }
+
+    public void createDialog(final Double insulinValue) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Recommended Insulin")
+                .setMessage(insulinValue.toString())
+                .setNegativeButton(android.R.string.cancel, null) // dismisses by default
+                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        Date date = new Date();
+
+                        InsValue insValue = new InsValue("novorapid", insulinValue, dateFormat.format(date));
+
+                        InsService insService = _apiManager.getInsService();
+                        Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
+                        call.enqueue(new Callback<InsValue>() {
+                            @Override
+                            public void onResponse(Call<InsValue> call, Response<InsValue> response) {
+
+                                if (response.isSuccessful()) {
+                                    Log.d("insvalue", "Successful post");
+                                    populateMainScreen();
+                                } else {
+                                    Log.d("insvalue", "Unsuccessful post");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<InsValue> call, Throwable t) {
+                                Log.d("Error", t.getMessage());
+                            }
+                        });
+                    }
+                })
+                .create()
+                .show();
     }
 }
