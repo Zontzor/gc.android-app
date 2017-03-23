@@ -21,6 +21,10 @@ import com.example.alex.glucosecoach.models.Food;
 import com.example.alex.glucosecoach.models.FoodLog;
 import com.example.alex.glucosecoach.services.FoodLogService;
 import com.example.alex.glucosecoach.services.FoodService;
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +32,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,40 +99,34 @@ public class AddFoodLogActivity extends AppCompatActivity {
             }
         });
 
-        _sumbitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!validate()) {
-                    return;
+        _sumbitButton.setOnClickListener((View v) -> {
+
+            Food food = (Food) _foodTypeSpin.getSelectedItem();
+
+            FoodLog foodLog = new FoodLog(
+                    food.getId(),
+                    Double.parseDouble(_foodValueText.getText().toString()),
+                    formateDateTime(_foodTimeText.getText().toString()));
+
+            FoodLogService foodLogService = _apiService.getFoodLogService();
+            Call<FoodLog> call = foodLogService.postFoodLog(foodLog, _userManager.getUsername());
+            call.enqueue(new Callback<FoodLog>() {
+                @Override
+                public void onResponse(Call<FoodLog> call, Response<FoodLog> response) {
+
+                    if (response.isSuccessful()) {
+                        Log.d("food_log", "Successful post");
+                        finish();
+                    } else {
+                        Log.d("food_log", "Unsuccessful post");
+                    }
                 }
 
-                Food food = (Food) _foodTypeSpin.getSelectedItem();
-
-                FoodLog foodLog = new FoodLog(
-                        food.getId(),
-                        Double.parseDouble(_foodValueText.getText().toString()),
-                        formateDateTime(_foodTimeText.getText().toString()));
-
-                FoodLogService foodLogService = _apiService.getFoodLogService();
-                Call<FoodLog> call = foodLogService.postFoodLog(foodLog, _userManager.getUsername());
-                call.enqueue(new Callback<FoodLog>() {
-                    @Override
-                    public void onResponse(Call<FoodLog> call, Response<FoodLog> response) {
-
-                        if (response.isSuccessful()) {
-                            Log.d("food_log", "Successful post");
-                            finish();
-                        } else {
-                            Log.d("food_log", "Unsuccessful post");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<FoodLog> call, Throwable t) {
-                        Log.d("Error", t.getMessage());
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<FoodLog> call, Throwable t) {
+                    Log.d("Error", t.getMessage());
+                }
+            });
         });
 
     }
@@ -170,25 +173,34 @@ public class AddFoodLogActivity extends AppCompatActivity {
 
     public void setSpinnerItems() {
         FoodService foodService = _apiService.getFoodService();
-        Call<List<Food>> call = foodService.getFoods();
-        call.enqueue(new Callback<List<Food> >() {
+
+        Observable<List<Food>> foodListObservable = foodService.getFoodsObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        foodListObservable.subscribe(new Observer<List<Food>>() {
             @Override
-            public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
+            public void onSubscribe(Disposable d) {
 
-                if (response.isSuccessful()) {
-                    ArrayAdapter<Food> dataAdapter = new ArrayAdapter<>(AddFoodLogActivity.this,
-                            android.R.layout.simple_spinner_item, response.body());
-                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                    _foodTypeSpin.setAdapter(dataAdapter);
-                } else {
-                    Log.d("exercises", "Failed to get exercises list");
-                }
             }
 
             @Override
-            public void onFailure(Call<List<Food>> call, Throwable t) {
-                Log.d("Error", t.getMessage());
+            public void onNext(List<Food> value) {
+                ArrayAdapter<Food> dataAdapter = new ArrayAdapter<>(AddFoodLogActivity.this,
+                        android.R.layout.simple_spinner_item, value);
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                _foodTypeSpin.setAdapter(dataAdapter);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }

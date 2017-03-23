@@ -4,6 +4,7 @@ import com.example.alex.glucosecoach.models.Food;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.Call;
 
@@ -14,4 +15,7 @@ import retrofit2.Call;
 public interface FoodService {
     @GET("foods")
     Call<List<Food>> getFoods();
+
+    @GET("foods")
+    Observable<List<Food>> getFoodsObservable();
 }
