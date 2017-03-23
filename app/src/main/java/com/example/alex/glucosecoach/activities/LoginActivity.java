@@ -17,7 +17,9 @@ import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
 import com.example.alex.glucosecoach.models.Token;
+import com.example.alex.glucosecoach.models.User;
 import com.example.alex.glucosecoach.services.LoginService;
+import com.example.alex.glucosecoach.services.UserService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,24 +48,14 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_login);
         _signupLink = (TextView) findViewById(R.id.link_signup);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        _loginButton.setOnClickListener(v -> login());
 
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        _signupLink.setOnClickListener(v -> {
+            // Start the Signup activity
+            Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+            startActivityForResult(intent, REQUEST_SIGNUP);
+            finish();
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
 
 
@@ -89,33 +81,31 @@ public class LoginActivity extends AppCompatActivity {
         final String password = _passwordText.getText().toString();
 
         new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        apiManager = new ApiManager(username, password);
-                        LoginService loginService = apiManager.getLoginService();
-                        Call<Token> call = loginService.basicLogin();
-                        call.enqueue(new Callback<Token >() {
-                            @Override
-                            public void onResponse(Call<Token> call, Response<Token> response) {
-                                progressDialog.dismiss();
+                () -> {
+                    apiManager = new ApiManager(username, password);
+                    LoginService loginService = apiManager.getLoginService();
+                    Call<Token> call = loginService.basicLogin();
+                    call.enqueue(new Callback<Token >() {
+                        @Override
+                        public void onResponse(Call<Token> call, Response<Token> response) {
+                            progressDialog.dismiss();
 
-                                if (response.isSuccessful()) {
-                                    Token token = response.body();
-                                    Log.d("token", token.getTokenValue());
-                                    onLoginSuccess(token, username);
-                                } else {
-                                    onLoginFailed();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Token> call, Throwable t) {
-                                progressDialog.dismiss();
+                            if (response.isSuccessful()) {
+                                Token token = response.body();
+                                Log.d("token", token.getTokenValue());
+                                onLoginSuccess(token, username);
+                            } else {
                                 onLoginFailed();
-                                Log.d("Server connect error", t.getMessage());
                             }
-                        });
-                    }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Token> call, Throwable t) {
+                            progressDialog.dismiss();
+                            onLoginFailed();
+                            Log.d("Server connect error", t.getMessage());
+                        }
+                    });
                 }, 3000);
     }
 
@@ -128,7 +118,26 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess(Token token, String username) {
 
         tokenManager.setToken(token.getTokenValue());
-        userManager.setUsername(username);
+
+        UserService userService = apiManager.getUserService();
+        Call<User> call = userService.getUser(username);
+        call.enqueue(new Callback<User >() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+                if (response.isSuccessful()) {
+                    userManager.setUser(response.body());
+                } else {
+                    onLoginFailed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d("Server connect error", t.getMessage());
+                onLoginFailed();
+            }
+        });
 
         Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
         Intent mainActivity = new Intent(this, MainActivity.class);

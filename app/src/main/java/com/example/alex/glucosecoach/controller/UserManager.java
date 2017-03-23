@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.alex.glucosecoach.models.User;
+import com.google.gson.Gson;
 
 /**
  * Created by alex on 2/6/17.
@@ -29,23 +30,29 @@ public class UserManager {
         this.context = context;
     }
 
-    public String getUsername() {
-        return settings.getString("username", ""/*default value*/);
+    public void setUser(User user) {
+        SharedPreferences.Editor editor = settings.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        editor.putString("user", json);
+        editor.apply();
     }
 
-    public void setUsername(String username) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("username", username);
-        editor.apply();
+    public String getUsername() {
+        Gson gson = new Gson();
+        String userString = settings.getString("user", "");
+
+        User user = gson.fromJson(userString, User.class);
+
+        return user.getUsername();
     }
 
     public String getEmail() {
-        return settings.getString("email", ""/*default value*/);
-    }
+        Gson gson = new Gson();
+        String userString = settings.getString("user", "");
 
-    public void setEmail(String email) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("email", email);
-        editor.apply();
+        User user = gson.fromJson(userString, User.class);
+
+        return user.getEmail();
     }
 }

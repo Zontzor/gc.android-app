@@ -155,17 +155,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // load fragment in separate thread
-        Runnable mPendingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // update main content by replacing fragments
-                Fragment fragment = getHomeFragment();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
-                fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        Runnable mPendingRunnable = () -> {
+            // update main content by replacing fragments
+            Fragment fragment = getHomeFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                    android.R.anim.slide_out_right);
+            fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
+            fragmentTransaction.commitAllowingStateLoss();
         };
 
         mHandler.post(mPendingRunnable);
@@ -183,17 +180,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                HomeFragment homeFragment = new HomeFragment();
-                return homeFragment;
+                return new HomeFragment();
             case 1:
-                LogbookFragment logbookFragment = new LogbookFragment();
-                return logbookFragment;
+                return new LogbookFragment();
             case 2:
-                ChartsFragment chartsFragment = new ChartsFragment();
-                return chartsFragment;
+                return new ChartsFragment();
             case 3:
-                SettingsFragment settingsFragment = new SettingsFragment();
-                return settingsFragment;
+                return new SettingsFragment();
             default:
                 return new HomeFragment();
         }
@@ -301,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         return true;
@@ -348,40 +340,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupFabMenuItemsListeners() {
-        _bgMenuItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleFab();
-                Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
-                startActivity(addBGReadingActivity);
-            }
+        _bgMenuItem.setOnClickListener(view -> {
+            toggleFab();
+            Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
+            startActivity(addBGReadingActivity);
         });
 
-        _insMenuItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleFab();
-                Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
-                startActivity(addInsulinActivity);
-            }
+        _insMenuItem.setOnClickListener(view -> {
+            toggleFab();
+            Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
+            startActivity(addInsulinActivity);
         });
 
-        _carbsMenuItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleFab();
-                Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
-                startActivity(addCarbsActivity);
-            }
+        _carbsMenuItem.setOnClickListener(view -> {
+            toggleFab();
+            Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
+            startActivity(addCarbsActivity);
         });
 
-        _exerMenuItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleFab();
-                Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
-                startActivity(addExerciseActivity);
-            }
+        _exerMenuItem.setOnClickListener(view -> {
+            toggleFab();
+            Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
+            startActivity(addExerciseActivity);
         });
     }
 

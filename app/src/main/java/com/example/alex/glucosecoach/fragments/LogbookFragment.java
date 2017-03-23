@@ -28,9 +28,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LogbookFragment extends Fragment {
     private ListView listView;
@@ -49,8 +46,6 @@ public class LogbookFragment extends Fragment {
         UserManager _userManager = new UserManager(getActivity());
         TokenManager _tokenManager = new TokenManager(getActivity());
         ApiManager _apiManager = new ApiManager(_tokenManager.getToken());
-
-        final Context context = this.getContext();
 
         listView = (ListView) view.findViewById(R.id.menu_list_logbook);
 
