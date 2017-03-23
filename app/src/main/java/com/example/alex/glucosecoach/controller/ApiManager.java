@@ -11,6 +11,7 @@ import com.example.alex.glucosecoach.services.LoginService;
 import com.example.alex.glucosecoach.services.FactService;
 import com.example.alex.glucosecoach.services.PredictionService;
 import com.example.alex.glucosecoach.services.UserService;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -35,7 +36,8 @@ public class ApiManager {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
 
     private String authToken;
     private AuthenticationInterceptor interceptor;
