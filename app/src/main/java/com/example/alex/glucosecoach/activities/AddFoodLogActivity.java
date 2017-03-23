@@ -81,25 +81,25 @@ public class AddFoodLogActivity extends AppCompatActivity {
 
         _foodTimeText.setText(sdf.format(date));
 
-        _foodTimeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar calender = Calendar.getInstance();
-                int hour = calender.get(Calendar.HOUR_OF_DAY);
-                int minute = calender.get(Calendar.MINUTE);
+        _foodTimeText.setOnClickListener((View v) -> {
+            final Calendar calender = Calendar.getInstance();
+            int hour = calender.get(Calendar.HOUR_OF_DAY);
+            int minute = calender.get(Calendar.MINUTE);
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddFoodLogActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                                _foodTimeText.setText(hourOfDay + ":" + minuteOfHour);
-                            }
-                        }, hour, minute, true);
-                timePickerDialog.show();
-            }
+            TimePickerDialog timePickerDialog = new TimePickerDialog(AddFoodLogActivity.this,
+                    new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                            _foodTimeText.setText(hourOfDay + ":" + minuteOfHour);
+                        }
+                    }, hour, minute, true);
+            timePickerDialog.show();
         });
 
         _sumbitButton.setOnClickListener((View v) -> {
+            if (!validate()) {
+                return;
+            }
 
             Food food = (Food) _foodTypeSpin.getSelectedItem();
 
@@ -174,11 +174,10 @@ public class AddFoodLogActivity extends AppCompatActivity {
     public void setSpinnerItems() {
         FoodService foodService = _apiService.getFoodService();
 
-        Observable<List<Food>> foodListObservable = foodService.getFoodsObservable()
+        foodService.getFoodsObservable()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        foodListObservable.subscribe(new Observer<List<Food>>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Food>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -195,7 +194,7 @@ public class AddFoodLogActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-
+                Log.d("food_log", "Error fetching foods");
             }
 
             @Override

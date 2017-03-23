@@ -4,6 +4,7 @@ import com.example.alex.glucosecoach.models.Fact;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -18,4 +19,7 @@ public interface FactService {
 
     @GET("facts/{username}")
     Call<List<Fact>> getFacts(@Path("username") String username);
+
+    @GET("facts/{username}")
+    Observable<List<Fact>> getFactsObservable(@Path("username") String username);
 }

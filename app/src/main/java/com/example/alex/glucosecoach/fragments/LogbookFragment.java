@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +24,10 @@ import com.example.alex.glucosecoach.services.FactService;
 
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,49 +55,55 @@ public class LogbookFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.menu_list_logbook);
 
         FactService factService = _apiManager.getFactService();
-        Call<List<Fact>> call = factService.getFacts(_userManager.getUsername());
-        call.enqueue(new Callback<List<Fact>>() {
-            @Override
-            public void onResponse(Call<List<Fact>> call, Response<List<Fact>> response) {
-                if (response.isSuccessful() && response.body().size() != 0) {
-                    listView.setAdapter(new LogAdapter(getActivity(), response.body()));
-                    setListViewListener();
-                } else {
-                    Toast.makeText(context, "No Data", Toast.LENGTH_LONG).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Fact>> call, Throwable t) {
-            }
-        });
+        factService.getFactsObservable(_userManager.getUsername())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Fact>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
 
+                    @Override
+                    public void onNext(List<Fact> value) {
+                        listView.setAdapter(new LogAdapter(getActivity(), value));
+                        setListViewListener();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("fact_log", "Error fetching facts");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
         return view;
     }
 
     public void setListViewListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Fact fact = (Fact) adapterView.getAdapter().getItem(position);
+        listView.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
+            Fact fact = (Fact) adapterView.getAdapter().getItem(position);
 
-                StringBuilder sb = new StringBuilder();
-                sb.append(getString(R.string.fact_bg, fact.getBgValue().toString()));
-                sb.append("\n");
-                sb.append(getString(R.string.fact_ins, fact.getInsValue().toString()));
-                sb.append("\n");
-                sb.append(getString(R.string.fact_carbs, fact.getFoodValue().toString()));
-                sb.append("\n");
-                sb.append(getString(R.string.fact_exer, fact.getExerciseValue().toString()));
+            StringBuilder sb = new StringBuilder();
+            sb.append(getString(R.string.fact_bg, fact.getBgValue().toString()));
+            sb.append("\n");
+            sb.append(getString(R.string.fact_ins, fact.getInsValue().toString()));
+            sb.append("\n");
+            sb.append(getString(R.string.fact_carbs, fact.getFoodValue().toString()));
+            sb.append("\n");
+            sb.append(getString(R.string.fact_exer, fact.getExerciseValue().toString()));
 
-                new AlertDialog.Builder(getActivity())
-                    .setTitle(getString(R.string.fact_date, fact.getPfDate(), fact.todToString(fact.getPfTimeOfDay())))
-                        .setMessage(sb)
-                    .create()
-                    .show();
-            }
+            new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.fact_date, fact.getPfDate(), fact.todToString(fact.getPfTimeOfDay())))
+                    .setMessage(sb)
+                .create()
+                .show();
+
         });
     }
 

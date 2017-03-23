@@ -14,8 +14,5 @@ import retrofit2.Call;
 
 public interface FoodService {
     @GET("foods")
-    Call<List<Food>> getFoods();
-
-    @GET("foods")
     Observable<List<Food>> getFoodsObservable();
 }
