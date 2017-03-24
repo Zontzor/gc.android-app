@@ -1,6 +1,7 @@
 package com.example.alex.glucosecoach.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -119,6 +120,8 @@ public class LoginActivity extends AppCompatActivity {
 
         tokenManager.setToken(token.getTokenValue());
 
+        Context context = getApplicationContext();
+
         UserService userService = apiManager.getUserService();
         Call<User> call = userService.getUser(username);
         call.enqueue(new Callback<User >() {
@@ -127,6 +130,12 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     userManager.setUser(response.body());
+
+                    Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
+                    Intent mainActivity = new Intent(context, MainActivity.class);
+                    mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(mainActivity);
+                    finish();
                 } else {
                     onLoginFailed();
                 }
@@ -138,12 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                 onLoginFailed();
             }
         });
-
-        Toast.makeText(getApplicationContext(), "Login success", Toast.LENGTH_LONG).show();
-        Intent mainActivity = new Intent(this, MainActivity.class);
-        mainActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(mainActivity);
-        finish();
     }
 
     public void onLoginFailed() {

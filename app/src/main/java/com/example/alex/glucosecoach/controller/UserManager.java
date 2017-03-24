@@ -44,6 +44,10 @@ public class UserManager {
 
         User user = gson.fromJson(userString, User.class);
 
+        if (user == null) {
+            return "username";
+        }
+
         return user.getUsername();
     }
 
@@ -52,6 +56,10 @@ public class UserManager {
         String userString = settings.getString("user", "");
 
         User user = gson.fromJson(userString, User.class);
+
+        if (user == null) {
+            return "email";
+        }
 
         return user.getEmail();
     }
