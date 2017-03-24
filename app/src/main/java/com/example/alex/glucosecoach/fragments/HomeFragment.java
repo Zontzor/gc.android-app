@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.example.alex.glucosecoach.services.PredictionService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -62,6 +65,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Home - " + getTimeOfDay());
+
         _tokenManager = new TokenManager(getActivity());
 
         if (isLoggedIn()) {
@@ -79,16 +84,16 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     FactService factService = _apiManager.getFactService();
-                    Call<Fact> call = factService.getFact(_userManager.getUsername());
-                    call.enqueue(new Callback<Fact>() {
+                    Call<Fact> factCall = factService.getFact(_userManager.getUsername());
+                    factCall.enqueue(new Callback<Fact>() {
                         @Override
                         public void onResponse(Call<Fact> call, Response<Fact> response) {
                             if (response.isSuccessful()) {
                                 Fact fact = response.body();
 
                                 PredictionService predictionService = _apiManager.getPredictionService();
-                                Call<Double> call2 = predictionService.getPrediction(fact, _userManager.getUsername());
-                                call2.enqueue(new Callback<Double>() {
+                                Call<Double> callPredict = predictionService.getPrediction(fact, _userManager.getUsername());
+                                callPredict.enqueue(new Callback<Double>() {
                                     @Override
                                     public void onResponse(Call<Double> call, final Response<Double> response) {
                                         if (response.isSuccessful()) {
@@ -204,5 +209,19 @@ public class HomeFragment extends Fragment {
                 })
                 .create()
                 .show();
+    }
+
+    public String getTimeOfDay() {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+        if (hour >= 7 & hour < 12) {
+            return "Morning";
+        } else if (hour >= 12 & hour < 17) {
+            return "Afternoon";
+        } else if(hour >= 17 & hour < 20) {
+            return "Evening";
+        } else {
+            return "Night";
+        }
     }
 }
