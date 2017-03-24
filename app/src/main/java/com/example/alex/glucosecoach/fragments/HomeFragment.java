@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
 import com.example.alex.glucosecoach.activities.LoginActivity;
@@ -28,9 +28,11 @@ import com.example.alex.glucosecoach.services.InsService;
 import com.example.alex.glucosecoach.services.PredictionService;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,42 +82,9 @@ public class HomeFragment extends Fragment {
             _txtExerciseValue = (TextView) view.findViewById(R.id.txt_last_exrc_value);
 
             _btnStartPredictionActivity = (Button) view.findViewById(R.id.btn_start_predicition);
-            _btnStartPredictionActivity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FactService factService = _apiManager.getFactService();
-                    Call<Fact> factCall = factService.getFact(_userManager.getUsername());
-                    factCall.enqueue(new Callback<Fact>() {
-                        @Override
-                        public void onResponse(Call<Fact> call, Response<Fact> response) {
-                            if (response.isSuccessful()) {
-                                Fact fact = response.body();
 
-                                PredictionService predictionService = _apiManager.getPredictionService();
-                                Call<Double> callPredict = predictionService.getPrediction(fact, _userManager.getUsername());
-                                callPredict.enqueue(new Callback<Double>() {
-                                    @Override
-                                    public void onResponse(Call<Double> call, final Response<Double> response) {
-                                        if (response.isSuccessful()) {
-                                            Double insulinValue = response.body();
-                                            createDialog(insulinValue);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Double> call, Throwable t) {
-                                    }
-                                });
-                            } else if (response.code() == 401) {
-                                startLoginActivity();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Fact> call, Throwable t) {
-                        }
-                    });
-                }
+            _btnStartPredictionActivity.setOnClickListener(v -> {
+                predictionButtonLogic();
             });
         } else {
             startLoginActivity();
@@ -148,10 +117,13 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<Fact> call, Response<Fact> response) {
                 if (response.isSuccessful()) {
                     Fact fact = response.body();
-                    _txtBGValue.setText(getString(R.string.main_bg, fact.getBgValue().toString()));
-                    _txtInsulinValue.setText(getString(R.string.main_ins, fact.getInsValue().toString()));
-                    _txtCarbsValue.setText(getString(R.string.main_carbs, fact.getFoodValue().toString()));
-                    _txtExerciseValue.setText(getString(R.string.main_exer, fact.getExerciseValue().toString()));
+
+                    if (checkFactDate(fact)) {
+                        _txtBGValue.setText(getString(R.string.main_bg, fact.getBgValue().toString()));
+                        _txtInsulinValue.setText(getString(R.string.main_ins, fact.getInsValue().toString()));
+                        _txtCarbsValue.setText(getString(R.string.main_carbs, fact.getFoodValue().toString()));
+                        _txtExerciseValue.setText(getString(R.string.main_exer, fact.getExerciseValue().toString()));
+                    }
                 } else if (response.code() == 401) {
                     startLoginActivity();
                 }
@@ -173,44 +145,54 @@ public class HomeFragment extends Fragment {
         startActivity(loginActivity);
     }
 
-    public void createDialog(final Double insulinValue) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Recommended Insulin")
-                .setMessage(insulinValue.toString())
-                .setNegativeButton(android.R.string.cancel, null) // dismisses by default
-                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        Date date = new Date();
+    /*
+        Function to check if the date and time of day of the facts matches now,
+        if the fact matches a date object of now then return true, else return false
+     */
+    public boolean checkFactDate(Fact fact) {
+        DateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy", Locale.getDefault());
+        Date factDate;
 
-                        InsValue insValue = new InsValue("novorapid", insulinValue, dateFormat.format(date));
+        try {
+            factDate = dateFormat.parse(fact.getPfDate());
 
-                        InsService insService = _apiManager.getInsService();
-                        Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
-                        call.enqueue(new Callback<InsValue>() {
-                            @Override
-                            public void onResponse(Call<InsValue> call, Response<InsValue> response) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY,0);
+            cal.set(Calendar.MINUTE,0);
+            cal.set(Calendar.SECOND,0);
+            cal.set(Calendar.MILLISECOND,0);
 
-                                if (response.isSuccessful()) {
-                                    Log.d("insvalue", "Successful post");
-                                    populateMainScreen();
-                                } else {
-                                    Log.d("insvalue", "Unsuccessful post");
-                                }
-                            }
+            Date today = cal.getTime();
 
-                            @Override
-                            public void onFailure(Call<InsValue> call, Throwable t) {
-                                Log.d("Error", t.getMessage());
-                            }
-                        });
-                    }
-                })
-                .create()
-                .show();
+            if (factDate.before(today)) {
+                return false;
+            }
+
+            int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            int timeOfDay;
+
+            if (nowHour >= 7 & nowHour < 12) {
+                timeOfDay = 1;
+            } else if (nowHour >= 12 & nowHour < 17) {
+                timeOfDay = 2;
+            } else if(nowHour >= 17 & nowHour < 20) {
+                timeOfDay = 3;
+            } else {
+                timeOfDay = 4;
+            }
+
+            return fact.getPfTimeOfDay() == timeOfDay;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
+    /*
+        Function to get the time of day for now as a string version
+     */
     public String getTimeOfDay() {
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
@@ -223,5 +205,80 @@ public class HomeFragment extends Fragment {
         } else {
             return "Night";
         }
+    }
+
+    public void predictionButtonLogic() {
+        Context context = getContext();
+        FactService factService = _apiManager.getFactService();
+        Call<Fact> factCall = factService.getFact(_userManager.getUsername());
+        factCall.enqueue(new Callback<Fact>() {
+            @Override
+            public void onResponse(Call<Fact> call, Response<Fact> response) {
+                if (response.isSuccessful()) {
+                    Fact fact = response.body();
+
+                    if (checkFactDate(fact)) {
+                        PredictionService predictionService = _apiManager.getPredictionService();
+                        Call<Double> callPredict = predictionService.getPrediction(fact, _userManager.getUsername());
+                        callPredict.enqueue(new Callback<Double>() {
+                            @Override
+                            public void onResponse(Call<Double> call, final Response<Double> response) {
+                                if (response.isSuccessful()) {
+                                    Double insulinValue = response.body();
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle("Recommended Insulin")
+                                            .setMessage(insulinValue.toString())
+                                            .setNegativeButton(android.R.string.cancel, null) // dismisses by default
+                                            .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                                    Date date = new Date();
+
+                                                    InsValue insValue = new InsValue("novorapid", insulinValue, dateFormat.format(date));
+
+                                                    InsService insService = _apiManager.getInsService();
+                                                    Call<InsValue> call = insService.postInsDosage(insValue, _userManager.getUsername());
+                                                    call.enqueue(new Callback<InsValue>() {
+                                                        @Override
+                                                        public void onResponse(Call<InsValue> call, Response<InsValue> response) {
+
+                                                            if (response.isSuccessful()) {
+                                                                Log.d("insvalue", "Successful post");
+                                                                populateMainScreen();
+                                                            } else {
+                                                                Log.d("insvalue", "Unsuccessful post");
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<InsValue> call, Throwable t) {
+                                                            Log.d("Error", t.getMessage());
+                                                        }
+                                                    });
+                                                }
+                                            })
+                                            .create()
+                                            .show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Double> call, Throwable t) {
+                            }
+                        });
+                    } else {
+                        Toast.makeText(context, "No data for " + getTimeOfDay(), Toast.LENGTH_LONG).show();
+                    }
+
+                } else if (response.code() == 401) {
+                    startLoginActivity();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Fact> call, Throwable t) {
+            }
+        });
     }
 }
