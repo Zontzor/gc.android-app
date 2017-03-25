@@ -33,10 +33,10 @@
     <string name="fact_carbs">Carbs: %1$s</string>
     <string name="fact_exer">Exercise: %1$s</string>
 
-    <string name="placeholder">No Data</string>
+    <string name="placeholder">0</string>
+    <string name="placeholder_decimal">0.0</string>
 
     <string name="get_prediction">Get Insulin Value</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
