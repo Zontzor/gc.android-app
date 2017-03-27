@@ -7,8 +7,6 @@ import android.preference.PreferenceManager;
 import com.example.alex.glucosecoach.models.Token;
 import com.google.gson.Gson;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 

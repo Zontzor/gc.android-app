@@ -1,8 +1,6 @@
 package com.example.alex.glucosecoach.services;
 
 import com.example.alex.glucosecoach.models.Token;
-import com.example.alex.glucosecoach.models.User;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 

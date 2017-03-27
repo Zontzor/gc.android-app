@@ -2,9 +2,6 @@ package com.example.alex.glucosecoach.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by alex on 2/27/17.
  */

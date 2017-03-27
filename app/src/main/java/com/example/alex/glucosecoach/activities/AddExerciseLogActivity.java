@@ -23,7 +23,6 @@ import com.example.alex.glucosecoach.services.ExerciseService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,8 +30,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.id.list;
 
 /**
  * Created by alex on 1/25/17.

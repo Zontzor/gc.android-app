@@ -1,6 +1,5 @@
 package com.example.alex.glucosecoach.activities;
 
-import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +20,6 @@ import com.example.alex.glucosecoach.models.Food;
 import com.example.alex.glucosecoach.models.FoodLog;
 import com.example.alex.glucosecoach.services.FoodLogService;
 import com.example.alex.glucosecoach.services.FoodService;
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,7 +27,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

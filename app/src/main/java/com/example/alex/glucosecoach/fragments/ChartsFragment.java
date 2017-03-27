@@ -7,12 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.graphics.Color;
 import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
-import com.example.alex.glucosecoach.adapters.LogAdapter;
 import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
@@ -86,11 +84,6 @@ public class ChartsFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void initLineView(LineView lineView) {
-
-
     }
 
     @Override
