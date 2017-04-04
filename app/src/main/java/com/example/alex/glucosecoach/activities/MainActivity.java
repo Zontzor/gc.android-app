@@ -340,28 +340,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setupFabMenuItemsListeners() {
-        _bgMenuItem.setOnClickListener(view -> {
-            toggleFab();
-            Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
-            startActivity(addBGReadingActivity);
+        _bgMenuItem.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               toggleFab();
+               Intent addBGReadingActivity = new Intent(MainActivity.this, AddBGReadingActivity.class);
+               startActivity(addBGReadingActivity);
+           }
         });
 
-        _insMenuItem.setOnClickListener(view -> {
-            toggleFab();
-            Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
-            startActivity(addInsulinActivity);
+        _insMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFab();
+                Intent addInsulinActivity = new Intent(MainActivity.this, AddInsulinActivity.class);
+                startActivity(addInsulinActivity);
+            }
         });
 
-        _carbsMenuItem.setOnClickListener(view -> {
-            toggleFab();
-            Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
-            startActivity(addCarbsActivity);
+        _carbsMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFab();
+                Intent addCarbsActivity = new Intent(MainActivity.this, AddFoodLogActivity.class);
+                startActivity(addCarbsActivity);
+            }
         });
 
-        _exerMenuItem.setOnClickListener(view -> {
-            toggleFab();
-            Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
-            startActivity(addExerciseActivity);
+        _exerMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFab();
+                Intent addExerciseActivity = new Intent(MainActivity.this, AddExerciseLogActivity.class);
+                startActivity(addExerciseActivity);
+            }
         });
     }
 

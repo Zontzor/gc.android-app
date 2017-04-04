@@ -75,54 +75,59 @@ public class AddFoodLogActivity extends AppCompatActivity {
 
         _foodTimeText.setText(sdf.format(date));
 
-        _foodTimeText.setOnClickListener((View v) -> {
-            final Calendar calender = Calendar.getInstance();
-            int hour = calender.get(Calendar.HOUR_OF_DAY);
-            int minute = calender.get(Calendar.MINUTE);
+        _foodTimeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calender = Calendar.getInstance();
+                int hour = calender.get(Calendar.HOUR_OF_DAY);
+                int minute = calender.get(Calendar.MINUTE);
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(AddFoodLogActivity.this,
-                    new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
-                            _foodTimeText.setText(hourOfDay + ":" + minuteOfHour);
-                        }
-                    }, hour, minute, true);
-            timePickerDialog.show();
-        });
-
-        _sumbitButton.setOnClickListener((View v) -> {
-            if (!validate()) {
-                return;
+                TimePickerDialog timePickerDialog = new TimePickerDialog(AddFoodLogActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+                                _foodTimeText.setText(hourOfDay + ":" + minuteOfHour);
+                            }
+                        }, hour, minute, true);
+                timePickerDialog.show();
             }
-
-            Food food = (Food) _foodTypeSpin.getSelectedItem();
-
-            FoodLog foodLog = new FoodLog(
-                    food.getId(),
-                    Double.parseDouble(_foodValueText.getText().toString()),
-                    formateDateTime(_foodTimeText.getText().toString()));
-
-            FoodLogService foodLogService = _apiService.getFoodLogService();
-            Call<FoodLog> call = foodLogService.postFoodLog(foodLog, _userManager.getUsername());
-            call.enqueue(new Callback<FoodLog>() {
-                @Override
-                public void onResponse(Call<FoodLog> call, Response<FoodLog> response) {
-
-                    if (response.isSuccessful()) {
-                        Log.d("food_log", "Successful post");
-                        finish();
-                    } else {
-                        Log.d("food_log", "Unsuccessful post");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<FoodLog> call, Throwable t) {
-                    Log.d("Error", t.getMessage());
-                }
-            });
         });
 
+        _sumbitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!validate()) {
+                    return;
+                }
+
+                Food food = (Food) _foodTypeSpin.getSelectedItem();
+
+                FoodLog foodLog = new FoodLog(
+                        food.getId(),
+                        Double.parseDouble(_foodValueText.getText().toString()),
+                        formateDateTime(_foodTimeText.getText().toString()));
+
+                FoodLogService foodLogService = _apiService.getFoodLogService();
+                Call<FoodLog> call = foodLogService.postFoodLog(foodLog, _userManager.getUsername());
+                call.enqueue(new Callback<FoodLog>() {
+                    @Override
+                    public void onResponse(Call<FoodLog> call, Response<FoodLog> response) {
+
+                        if (response.isSuccessful()) {
+                            Log.d("food_log", "Successful post");
+                            finish();
+                        } else {
+                            Log.d("food_log", "Unsuccessful post");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<FoodLog> call, Throwable t) {
+                        Log.d("Error", t.getMessage());
+                    }
+                });
+            }
+        });
     }
 
     public boolean validate() {

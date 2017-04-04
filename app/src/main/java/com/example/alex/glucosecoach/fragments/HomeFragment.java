@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.glucosecoach.R;
+import com.example.alex.glucosecoach.activities.AddBGReadingActivity;
+import com.example.alex.glucosecoach.activities.AddExerciseLogActivity;
+import com.example.alex.glucosecoach.activities.AddFoodLogActivity;
+import com.example.alex.glucosecoach.activities.AddInsulinActivity;
 import com.example.alex.glucosecoach.activities.LoginActivity;
+import com.example.alex.glucosecoach.activities.MainActivity;
 import com.example.alex.glucosecoach.controller.ApiManager;
 import com.example.alex.glucosecoach.controller.TokenManager;
 import com.example.alex.glucosecoach.controller.UserManager;
@@ -40,6 +46,7 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     private TextView _txtBGValue, _txtInsulinValue, _txtCarbsValue, _txtExerciseValue;
+    private CardView _cardBGValue, _cardInsulinValue, _cardCarbsValue, _cardExerciseValue;
     private Button _btnStartPredictionActivity;
 
     ApiManager _apiManager;
@@ -80,6 +87,43 @@ public class HomeFragment extends Fragment {
             _txtInsulinValue = (TextView) view.findViewById(R.id.txt_last_ins_value);
             _txtCarbsValue = (TextView) view.findViewById(R.id.txt_last_carbs_value);
             _txtExerciseValue = (TextView) view.findViewById(R.id.txt_last_exrc_value);
+
+            _cardBGValue = (CardView) view.findViewById(R.id.card_bg);
+            _cardInsulinValue = (CardView) view.findViewById(R.id.card_ins);
+            _cardCarbsValue = (CardView) view.findViewById(R.id.card_carbs);
+            _cardExerciseValue = (CardView) view.findViewById(R.id.card_exer);
+
+            _cardBGValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addBGReadingActivity = new Intent(getContext(), AddBGReadingActivity.class);
+                    startActivity(addBGReadingActivity);
+                }
+            });
+
+            _cardInsulinValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addInsulinActivity = new Intent(getContext(), AddInsulinActivity.class);
+                    startActivity(addInsulinActivity);
+                }
+            });
+
+            _cardCarbsValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addCarbsActivity = new Intent(getContext(), AddFoodLogActivity.class);
+                    startActivity(addCarbsActivity);
+                }
+            });
+
+            _cardExerciseValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addExerciseActivity = new Intent(getContext(), AddExerciseLogActivity.class);
+                    startActivity(addExerciseActivity);
+                }
+            });
 
             _btnStartPredictionActivity = (Button) view.findViewById(R.id.btn_start_predicition);
 
